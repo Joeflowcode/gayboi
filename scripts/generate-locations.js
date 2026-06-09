@@ -121,6 +121,7 @@ function head({ title, desc, canonical, prefix, jsonld }) {
   <title>${title}</title>
   <meta name="description" content="${desc}" />
   <meta name="theme-color" content="#0A0F0D" />
+  <meta name="google-site-verification" content="3UowzFhVTaZqVMJLZvzt4h4WWNPFrpNluEnkFKHqJIU" />
   <link rel="canonical" href="${canonical}" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="${title}" />
