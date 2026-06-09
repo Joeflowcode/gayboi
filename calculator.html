@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Northwest Junk Removal — Price Calculator</title>
+  <style>
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      header, .card, .btn-row { display: none !important; }
+      .summary-card {
+        background: #fff; border: none; max-width: 100%;
+        padding: 0; color: #000;
+      }
+      .summary-card h2 { color: #000; font-size: 1.4rem; margin-bottom: 8px; }
+      .summary-line { color: #000; font-size: 1rem; }
+      .summary-line.total { color: #000; font-size: 1.3rem; }
+      #printHeader { display: block !important; }
+    }
+    #printHeader { display: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    header h1 {
+      font-size: 2rem;
+      color: #f0a500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    header p {
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .card {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 700px;
+      margin: 0 auto 24px auto;
+      border: 1px solid #0f3460;
+    }
+    .card h2 {
+      font-size: 1.1rem;
+      color: #f0a500;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #0f3460;
+      padding-bottom: 8px;
+    }
+    .card.upsell {
+      border-color: #2a6b3a;
+      background: #0f2318;
+    }
+    .card.upsell h2 {
+      color: #34d399;
+      border-bottom-color: #2a6b3a;
+    }
+    .upsell-badge {
+      display: inline-block;
+      background: #34d399;
+      color: #0a1a0f;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-left: 10px;
+      vertical-align: middle;
+      letter-spacing: 0.5px;
+    }
+    .upsell-note {
+      font-size: 0.85rem;
+      color: #6ee7b7;
+      margin-bottom: 16px;
+    }
+    .item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .item-row label {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+    .item-row .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 6px;
+      background: #0f3460;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .qty-btn:hover { background: #f0a500; color: #000; }
+    .qty-display {
+      width: 36px;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    .item-price {
+      width: 64px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 500px) { .section-grid { grid-template-columns: 1fr; } }
+    .modifier-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .modifier-row label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .modifier-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #f0a500;
+      cursor: pointer;
+    }
+    .upsell-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #142b1e;
+      margin-bottom: 8px;
+      gap: 12px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .upsell-row:hover { border-color: #34d399; }
+    .upsell-row.checked { border-color: #34d399; background: #1a3d28; }
+    .upsell-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #34d399;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .upsell-label { flex: 1; font-size: 0.95rem; }
+    .upsell-pricing {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+    .upsell-original {
+      font-size: 0.8rem;
+      color: #888;
+      text-decoration: line-through;
+    }
+    .upsell-bundle {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #34d399;
+    }
+    .upsell-save {
+      font-size: 0.72rem;
+      color: #6ee7b7;
+      background: #0f2318;
+      border: 1px solid #34d399;
+      border-radius: 4px;
+      padding: 1px 5px;
+    }
+    select, input[type="number"] {
+      background: #0f3460;
+      border: 1px solid #1a4a8a;
+      color: #eee;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.95rem;
+      width: 100%;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .field-group label { font-size: 0.9rem; color: #aaa; }
+    .summary-card {
+      background: #0f3460;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .summary-card h2 {
+      font-size: 1.2rem;
+      color: #f0a500;
+      margin-bottom: 16px;
+    }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      color: #ccc;
+    }
+    .summary-line.savings {
+      color: #34d399;
+      font-weight: bold;
+    }
+    .summary-line.total {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #f0a500;
+      border-top: 1px solid #1a4a8a;
+      padding-top: 12px;
+      margin-top: 8px;
+    }
+    .savings-banner {
+      background: #0f2318;
+      border: 1px solid #34d399;
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-top: 12px;
+      text-align: center;
+      color: #34d399;
+      font-weight: bold;
+      font-size: 0.95rem;
+      display: none;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #f0a500; color: #000; }
+    .btn-secondary { background: #1a1a2e; color: #eee; border: 1px solid #0f3460; }
+    .note { font-size: 0.8rem; color: #888; margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Northwest Junk Removal</h1>
+  <p>Job Pricing Calculator</p>
+</header>
+
+<!-- LOAD SIZE -->
+<div class="card">
+  <h2>Trailer Load Size</h2>
+  <div class="field-group">
+    <label>How much of the dump/covered trailer will this job fill?</label>
+    <select id="loadSize" onchange="calc()">
+      <option value="0">-- Select load size --</option>
+      <option value="89">Minimum load (a few small items) — $89</option>
+      <option value="139">1/8 trailer load — $139</option>
+      <option value="189">1/4 trailer load — $189</option>
+      <option value="249">3/8 trailer load — $249</option>
+      <option value="309">1/2 trailer load — $309</option>
+      <option value="369">5/8 trailer load — $369</option>
+      <option value="429">3/4 trailer load — $429</option>
+      <option value="499">7/8 trailer load — $499</option>
+      <option value="569">Full trailer load — $569</option>
+    </select>
+  </div>
+</div>
+
+<!-- HEAVY / SPECIAL ITEMS -->
+<div class="card">
+  <h2>Heavy &amp; Special Items</h2>
+  <p class="note" style="margin-bottom:12px;">Add per-item surcharges on top of the load price.</p>
+  <div class="section-grid">
+
+    <div>
+      <strong style="display:block;margin-bottom:8px;font-size:0.9rem;color:#aaa;">Appliances</strong>
+      <div class="item-row"><label>Refrigerator / Freezer</label><div class="controls"><button class="qty-btn" onclick="adj('fridge',-1)">−</button><span class="qty-display" id="fridgeQty">0</span><button class="qty-btn" onclick="adj('fridge',1)">+</button></div><span class="item-price">$60 ea</span></div>
+      <div class="item-row"><label>Washer / Dryer</label><div class="controls"><button class="qty-btn" onclick="adj('washer',-1)">−</button><span class="qty-display" id="washerQty">0</span><button class="qty-btn" onclick="adj('washer',1)">+</button></div><span class="item-price">$50 ea</span></div>
+      <div class="item-row"><label>Dishwasher / Microwave</label><div class="controls"><button class="qty-btn" onclick="adj('dish',-1)">−</button><span class="qty-display" id="dishQty">0</span><button class="qty-btn" onclick="adj('dish',1)">+</button></div><span class="item-price">$30 ea</span></div>
+      <div class="item-row"><label>AC Unit / Window Unit</label><div class="controls"><button class="qty-btn" onclick="adj('ac',-1)">−</button><span class="qty-display" id="acQty">0</span><button class="qty-btn" onclick="adj('ac',1)">+</button></div><span class="item-price">$40 ea</span></div>
+    </div>
+
+    <div>
+      <strong style="display:block;margin-bottom:8px;font-size:0.9rem;color:#aaa;">Furniture</strong>
+      <div class="item-row"><label>Sofa / Sectional</label><div class="controls"><button class="qty-btn" onclick="adj('sofa',-1)">−</button><span class="qty-display" id="sofaQty">0</span><button class="qty-btn" onclick="adj('sofa',1)">+</button></div><span class="item-price">$50 ea</span></div>
+      <div class="item-row"><label>Mattress / Box Spring</label><div class="controls"><button class="qty-btn" onclick="adj('mattress',-1)">−</button><span class="qty-display" id="mattressQty">0</span><button class="qty-btn" onclick="adj('mattress',1)">+</button></div><span class="item-price">$40 ea</span></div>
+      <div class="item-row"><label>Dresser / Armoire</label><div class="controls"><button class="qty-btn" onclick="adj('dresser',-1)">−</button><span class="qty-display" id="dresserQty">0</span><button class="qty-btn" onclick="adj('dresser',1)">+</button></div><span class="item-price">$30 ea</span></div>
+      <div class="item-row"><label>Hot Tub / Spa</label><div class="controls"><button class="qty-btn" onclick="adj('hottub',-1)">−</button><span class="qty-display" id="hottubQty">0</span><button class="qty-btn" onclick="adj('hottub',1)">+</button></div><span class="item-price">$225 ea</span></div>
+    </div>
+
+    <div>
+      <strong style="display:block;margin-bottom:8px;font-size:0.9rem;color:#aaa;">Yard / Outdoor</strong>
+      <div class="item-row"><label>Riding Mower / Tractor</label><div class="controls"><button class="qty-btn" onclick="adj('mower',-1)">−</button><span class="qty-display" id="mowerQty">0</span><button class="qty-btn" onclick="adj('mower',1)">+</button></div><span class="item-price">$85 ea</span></div>
+      <div class="item-row"><label>Push Mower / Trimmer</label><div class="controls"><button class="qty-btn" onclick="adj('pushmow',-1)">−</button><span class="qty-display" id="pushmowQty">0</span><button class="qty-btn" onclick="adj('pushmow',1)">+</button></div><span class="item-price">$25 ea</span></div>
+      <div class="item-row"><label>Shed / Play Set (disassemble)</label><div class="controls"><button class="qty-btn" onclick="adj('shed',-1)">−</button><span class="qty-display" id="shedQty">0</span><button class="qty-btn" onclick="adj('shed',1)">+</button></div><span class="item-price">$175 ea</span></div>
+      <div class="item-row"><label>Trampoline</label><div class="controls"><button class="qty-btn" onclick="adj('tramp',-1)">−</button><span class="qty-display" id="trampQty">0</span><button class="qty-btn" onclick="adj('tramp',1)">+</button></div><span class="item-price">$75 ea</span></div>
+    </div>
+
+    <div>
+      <strong style="display:block;margin-bottom:8px;font-size:0.9rem;color:#aaa;">Heavy / Hazardous</strong>
+      <div class="item-row"><label>TV / Monitor</label><div class="controls"><button class="qty-btn" onclick="adj('tv',-1)">−</button><span class="qty-display" id="tvQty">0</span><button class="qty-btn" onclick="adj('tv',1)">+</button></div><span class="item-price">$25 ea</span></div>
+      <div class="item-row"><label>Tire (no rim)</label><div class="controls"><button class="qty-btn" onclick="adj('tire',-1)">−</button><span class="qty-display" id="tireQty">0</span><button class="qty-btn" onclick="adj('tire',1)">+</button></div><span class="item-price">$20 ea</span></div>
+      <div class="item-row"><label>Paint Can / Propane Tank</label><div class="controls"><button class="qty-btn" onclick="adj('hazmat',-1)">−</button><span class="qty-display" id="hazmatQty">0</span><button class="qty-btn" onclick="adj('hazmat',1)">+</button></div><span class="item-price">$15 ea</span></div>
+      <div class="item-row"><label>Piano / Safe</label><div class="controls"><button class="qty-btn" onclick="adj('piano',-1)">−</button><span class="qty-display" id="pianoQty">0</span><button class="qty-btn" onclick="adj('piano',1)">+</button></div><span class="item-price">$175 ea</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JOB MODIFIERS -->
+<div class="card">
+  <h2>Job Modifiers</h2>
+  <div class="section-grid">
+    <div class="modifier-row">
+      <label><input type="checkbox" id="stairs" onchange="calc()"> Stairs / Upper floor (+$35)</label>
+      <label><input type="checkbox" id="longCarry" onchange="calc()"> Long carry / hard access (+$35)</label>
+      <label><input type="checkbox" id="disassembly" onchange="calc()"> Disassembly required (+$45)</label>
+      <label><input type="checkbox" id="sameDay" onchange="calc()"> Same-day / rush booking (+$60)</label>
+    </div>
+    <div class="modifier-row">
+      <label><input type="checkbox" id="heavy" onchange="calc()"> Exceptionally heavy load (+$60)</label>
+      <label><input type="checkbox" id="demo" onchange="calc()"> Light demo / drywall removal (+$100)</label>
+      <label><input type="checkbox" id="cleaning" onchange="calc()"> Sweep-out / light cleaning (+$50)</label>
+      <label><input type="checkbox" id="dumpFee" onchange="calc()"> Dump fee pass-through (+$65)</label>
+    </div>
+  </div>
+</div>
+
+<!-- UPSELL ADD-ONS -->
+<div class="card upsell">
+  <h2>Add-On Services <span class="upsell-badge">BUNDLE &amp; SAVE</span></h2>
+  <p class="upsell-note">Already on-site for junk removal — add these services at a discounted rate. Competitors charge full price; you get the bundle discount.</p>
+
+  <label class="upsell-row" id="row-pwDriveway">
+    <input type="checkbox" id="pwDriveway" onchange="toggleRow('pwDriveway');calc()">
+    <span class="upsell-label">Power Wash — Driveway / Walkway</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $249</span>
+      <span class="upsell-bundle">$199</span>
+      <span class="upsell-save">Save $50 (20% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-pwDeck">
+    <input type="checkbox" id="pwDeck" onchange="toggleRow('pwDeck');calc()">
+    <span class="upsell-label">Power Wash — Deck / Patio</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $199</span>
+      <span class="upsell-bundle">$159</span>
+      <span class="upsell-save">Save $40 (20% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-pwExterior">
+    <input type="checkbox" id="pwExterior" onchange="toggleRow('pwExterior');calc()">
+    <span class="upsell-label">Power Wash — House Exterior</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $329</span>
+      <span class="upsell-bundle">$269</span>
+      <span class="upsell-save">Save $60 (18% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-gutters">
+    <input type="checkbox" id="gutters" onchange="toggleRow('gutters');calc()">
+    <span class="upsell-label">Gutter Cleanout</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $219</span>
+      <span class="upsell-bundle">$169</span>
+      <span class="upsell-save">Save $50 (23% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-mossRemoval">
+    <input type="checkbox" id="mossRemoval" onchange="toggleRow('mossRemoval');calc()">
+    <span class="upsell-label">Roof Moss Removal</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $374</span>
+      <span class="upsell-bundle">$299</span>
+      <span class="upsell-save">Save $75 (20% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-mossTreatment">
+    <input type="checkbox" id="mossTreatment" onchange="toggleRow('mossTreatment');calc()">
+    <span class="upsell-label">Roof Moss Treatment (zinc/chemical)</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $199</span>
+      <span class="upsell-bundle">$149</span>
+      <span class="upsell-save">Save $50 (25% off)</span>
+    </span>
+  </label>
+
+</div>
+
+<!-- DISCOUNT / CUSTOM -->
+<div class="card">
+  <h2>Adjustments</h2>
+  <div class="section-grid">
+    <div class="field-group">
+      <label>Discount ($)</label>
+      <input type="number" id="discount" min="0" value="0" onchange="calc()" />
+    </div>
+    <div class="field-group">
+      <label>Extra charge / note ($)</label>
+      <input type="number" id="extra" min="0" value="0" onchange="calc()" />
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div id="printHeader" style="margin-bottom:16px;">
+  <h1 style="font-size:1.6rem;font-weight:bold;">Northwest Junk Removal</h1>
+  <p id="printDate" style="font-size:0.95rem;color:#555;margin-top:4px;"></p>
+</div>
+
+<div class="summary-card">
+  <h2>Price Summary</h2>
+  <div id="summaryLines"></div>
+  <div class="summary-line total">
+    <span>TOTAL</span>
+    <span id="totalDisplay">$0</span>
+  </div>
+  <div class="savings-banner" id="savingsBanner"></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="printQuote()">Print / Save Quote</button>
+    <button class="btn btn-secondary" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+<script>
+  const items = {
+    fridge:   { label: 'Refrigerator/Freezer',      price: 60 },
+    washer:   { label: 'Washer/Dryer',               price: 50 },
+    dish:     { label: 'Dishwasher/Microwave',        price: 30 },
+    ac:       { label: 'AC Unit',                     price: 40 },
+    sofa:     { label: 'Sofa/Sectional',              price: 50 },
+    mattress: { label: 'Mattress/Box Spring',         price: 40 },
+    dresser:  { label: 'Dresser/Armoire',             price: 30 },
+    hottub:   { label: 'Hot Tub/Spa',                price: 225 },
+    mower:    { label: 'Riding Mower/Tractor',        price: 85 },
+    pushmow:  { label: 'Push Mower/Trimmer',          price: 25 },
+    shed:     { label: 'Shed/Play Set (disassemble)', price: 175 },
+    tramp:    { label: 'Trampoline',                  price: 75 },
+    tv:       { label: 'TV/Monitor',                  price: 25 },
+    tire:     { label: 'Tire',                        price: 20 },
+    hazmat:   { label: 'Paint/Propane Can',           price: 15 },
+    piano:    { label: 'Piano/Safe',                  price: 175 },
+  };
+
+  const upsells = {
+    pwDriveway:   { label: 'Power Wash — Driveway/Walkway',    bundle: 199, regular: 249 },
+    pwDeck:       { label: 'Power Wash — Deck/Patio',          bundle: 159, regular: 199 },
+    pwExterior:   { label: 'Power Wash — House Exterior',      bundle: 269, regular: 329 },
+    gutters:      { label: 'Gutter Cleanout',                  bundle: 169, regular: 219 },
+    mossRemoval:  { label: 'Roof Moss Removal',                bundle: 299, regular: 374 },
+    mossTreatment:{ label: 'Roof Moss Treatment',              bundle: 149, regular: 199 },
+  };
+
+  const modifiers = {
+    stairs:      { label: 'Stairs/Upper floor',       price: 35 },
+    longCarry:   { label: 'Long carry/hard access',   price: 35 },
+    disassembly: { label: 'Disassembly',              price: 45 },
+    sameDay:     { label: 'Same-day/rush',            price: 60 },
+    heavy:       { label: 'Exceptionally heavy load', price: 60 },
+    demo:        { label: 'Light demo/drywall',       price: 100 },
+    cleaning:    { label: 'Sweep-out/cleaning',       price: 50 },
+    dumpFee:     { label: 'Dump fee',                 price: 65 },
+  };
+
+  const qty = {};
+  Object.keys(items).forEach(k => qty[k] = 0);
+
+  function adj(key, delta) {
+    qty[key] = Math.max(0, (qty[key] || 0) + delta);
+    document.getElementById(key + 'Qty').textContent = qty[key];
+    calc();
+  }
+
+  function toggleRow(id) {
+    const checked = document.getElementById(id).checked;
+    const row = document.getElementById('row-' + id);
+    if (checked) row.classList.add('checked');
+    else row.classList.remove('checked');
+  }
+
+  function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 0 }); }
+
+  function calc() {
+    const lines = [];
+    let total = 0;
+    let bundleSavings = 0;
+
+    const load = parseInt(document.getElementById('loadSize').value) || 0;
+    if (load > 0) {
+      const lbl = document.getElementById('loadSize').selectedOptions[0].text.split(' —')[0];
+      lines.push({ label: lbl, amount: load });
+      total += load;
+    }
+
+    Object.keys(items).forEach(k => {
+      if (qty[k] > 0) {
+        const sub = qty[k] * items[k].price;
+        lines.push({ label: items[k].label + ' x' + qty[k], amount: sub });
+        total += sub;
+      }
+    });
+
+    Object.keys(modifiers).forEach(k => {
+      if (document.getElementById(k).checked) {
+        lines.push({ label: modifiers[k].label, amount: modifiers[k].price });
+        total += modifiers[k].price;
+      }
+    });
+
+    Object.keys(upsells).forEach(k => {
+      if (document.getElementById(k).checked) {
+        const u = upsells[k];
+        const saved = u.regular - u.bundle;
+        const pct = Math.round(saved / u.regular * 100);
+        lines.push({ label: u.label + ' (bundle rate)', amount: u.bundle, savings: saved, pct });
+        total += u.bundle;
+        bundleSavings += saved;
+      }
+    });
+
+    const extra = parseFloat(document.getElementById('extra').value) || 0;
+    if (extra > 0) { lines.push({ label: 'Additional charge', amount: extra }); total += extra; }
+
+    const discount = parseFloat(document.getElementById('discount').value) || 0;
+    if (discount > 0) { lines.push({ label: 'Discount', amount: -discount }); total -= discount; }
+
+    total = Math.max(0, total);
+
+    const container = document.getElementById('summaryLines');
+    container.innerHTML = lines.map(l => {
+      if (l.savings) {
+        return `<div class="summary-line">
+          <span>${l.label} <span style="font-size:0.8rem;color:#34d399;">(you save ${fmt(l.savings)} — ${l.pct}% off)</span></span>
+          <span style="color:#34d399;">${fmt(l.amount)}</span>
+        </div>`;
+      }
+      return `<div class="summary-line${l.amount < 0 ? ' savings' : ''}">
+        <span>${l.label}</span><span>${l.amount < 0 ? '-' : ''}${fmt(l.amount)}</span>
+      </div>`;
+    }).join('') || '<div class="summary-line" style="color:#666;">No items selected yet.</div>';
+
+    document.getElementById('totalDisplay').textContent = fmt(total);
+
+    const banner = document.getElementById('savingsBanner');
+    if (bundleSavings > 0) {
+      banner.style.display = 'block';
+      banner.textContent = `Bundle discount applied — customer saves ${fmt(bundleSavings)} vs. hiring separately!`;
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  function resetAll() {
+    Object.keys(qty).forEach(k => { qty[k] = 0; document.getElementById(k + 'Qty').textContent = 0; });
+    document.getElementById('loadSize').value = '0';
+    Object.keys(modifiers).forEach(k => document.getElementById(k).checked = false);
+    Object.keys(upsells).forEach(k => {
+      document.getElementById(k).checked = false;
+      document.getElementById('row-' + k).classList.remove('checked');
+    });
+    document.getElementById('discount').value = 0;
+    document.getElementById('extra').value = 0;
+    calc();
+  }
+
+  function printQuote() {
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const lines = [...document.querySelectorAll('#summaryLines .summary-line')].map(el => {
+      const spans = el.querySelectorAll('span');
+      const label = spans[0].childNodes[0].textContent.trim();
+      const savingsEl = spans[0].querySelector('span');
+      const savingsNote = savingsEl ? savingsEl.textContent.trim() : '';
+      const amount = spans[1] ? spans[1].textContent.trim() : '';
+      return { label, savingsNote, amount };
+    });
+
+    const totalText = document.getElementById('totalDisplay').textContent;
+
+    let bundleSavings = 0;
+    Object.keys(upsells).forEach(k => {
+      if (document.getElementById(k).checked) {
+        bundleSavings += upsells[k].regular - upsells[k].bundle;
+      }
+    });
+
+    if (lines.length === 0) { alert('Add items to the quote before saving.'); return; }
+
+    const W = 640;
+    const lineH = 32;
+    const padX = 40;
+    const headerH = 130;
+    const footerH = bundleSavings > 0 ? 100 : 70;
+    const totalH = 52;
+    const H = headerH + lines.length * lineH + totalH + footerH;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, W, H);
+
+    // Header bar
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, W, 85);
+
+    // Accent stripe
+    ctx.fillStyle = '#f0a500';
+    ctx.fillRect(0, 85, W, 5);
+
+    // Company name
+    ctx.fillStyle = '#f0a500';
+    ctx.font = 'bold 22px Arial';
+    ctx.fillText('NORTHWEST JUNK REMOVAL', padX, 38);
+
+    // Subtitle
+    ctx.fillStyle = '#aaaaaa';
+    ctx.font = '13px Arial';
+    ctx.fillText('Job Quote — ' + date, padX, 62);
+
+    // Phone
+    ctx.fillStyle = '#888888';
+    ctx.font = '12px Arial';
+    ctx.fillText('(541) 425-2008  |  northwestjunkpros.com', padX, 78);
+
+    // Section header
+    ctx.fillStyle = '#333333';
+    ctx.font = 'bold 13px Arial';
+    ctx.fillText('PRICE BREAKDOWN', padX, 115);
+
+    // Divider
+    ctx.fillStyle = '#e0e0e0';
+    ctx.fillRect(padX, 120, W - padX * 2, 1);
+
+    // Line items
+    let y = headerH;
+    lines.forEach((line, i) => {
+      const isSavings = line.savingsNote.length > 0;
+      ctx.fillStyle = i % 2 === 0 ? '#f9f9f9' : '#ffffff';
+      ctx.fillRect(0, y - 22, W, lineH);
+
+      ctx.fillStyle = isSavings ? '#166534' : '#222222';
+      ctx.font = isSavings ? 'bold 13px Arial' : '13px Arial';
+      ctx.fillText(line.label, padX, y - 4);
+
+      if (isSavings && line.savingsNote) {
+        ctx.fillStyle = '#16a34a';
+        ctx.font = '11px Arial';
+        ctx.fillText(line.savingsNote, padX, y + 10);
+      }
+
+      ctx.fillStyle = isSavings ? '#16a34a' : '#222222';
+      ctx.font = isSavings ? 'bold 14px Arial' : '14px Arial';
+      ctx.textAlign = 'right';
+      ctx.fillText(line.amount, W - padX, y - 4);
+      ctx.textAlign = 'left';
+
+      y += lineH;
+    });
+
+    // Total bar
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, y - 6, W, totalH);
+    ctx.fillStyle = '#f0a500';
+    ctx.font = 'bold 20px Arial';
+    ctx.fillText('TOTAL', padX, y + 26);
+    ctx.textAlign = 'right';
+    ctx.fillText(totalText, W - padX, y + 26);
+    ctx.textAlign = 'left';
+    y += totalH;
+
+    // Bundle savings callout
+    if (bundleSavings > 0) {
+      ctx.fillStyle = '#f0fdf4';
+      ctx.fillRect(padX, y + 8, W - padX * 2, 38);
+      ctx.strokeStyle = '#16a34a';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(padX, y + 8, W - padX * 2, 38);
+      ctx.fillStyle = '#15803d';
+      ctx.font = 'bold 13px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Bundle discount applied — you saved $${bundleSavings} vs. hiring separately!`, W / 2, y + 32);
+      ctx.textAlign = 'left';
+      y += 46;
+    }
+
+    // Footer
+    ctx.fillStyle = '#aaaaaa';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Thank you for choosing Northwest Junk Removal!', W / 2, y + 22);
+    ctx.textAlign = 'left';
+
+    const link = document.createElement('a');
+    link.download = 'NW-Junk-Quote-' + date.replace(/,?\s+/g, '-') + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  calc();
+</script>
+</body>
+</html>
