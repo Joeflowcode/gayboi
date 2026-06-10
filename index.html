@@ -24,6 +24,115 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/styles.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://northwestjunkpros.com/#business",
+        "name": "Northwest Junk Pros",
+        "description": "Locally owned junk removal serving Central Oregon and the Willamette Valley. Same-day service, upfront pricing, and 70% of items diverted from the landfill.",
+        "url": "https://northwestjunkpros.com",
+        "telephone": "+15414252008",
+        "email": "info@northwestjunkpros.com",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Bend",
+          "addressRegion": "OR",
+          "postalCode": "97701",
+          "addressCountry": "US"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 44.0582,
+          "longitude": -121.3153
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+            "opens": "07:00",
+            "closes": "19:00"
+          }
+        ],
+        "areaServed": [
+          {"@type": "City", "name": "Bend", "sameAs": "https://en.wikipedia.org/wiki/Bend,_Oregon"},
+          {"@type": "City", "name": "Redmond", "sameAs": "https://en.wikipedia.org/wiki/Redmond,_Oregon"},
+          {"@type": "City", "name": "Sisters", "sameAs": "https://en.wikipedia.org/wiki/Sisters,_Oregon"},
+          {"@type": "City", "name": "Sunriver"},
+          {"@type": "City", "name": "La Pine"},
+          {"@type": "City", "name": "Gilchrist"},
+          {"@type": "City", "name": "Crescent"},
+          {"@type": "City", "name": "Eugene", "sameAs": "https://en.wikipedia.org/wiki/Eugene,_Oregon"},
+          {"@type": "City", "name": "Springfield", "sameAs": "https://en.wikipedia.org/wiki/Springfield,_Oregon"},
+          {"@type": "City", "name": "Walterville"},
+          {"@type": "City", "name": "Vida"},
+          {"@type": "City", "name": "Blue River"},
+          {"@type": "City", "name": "McKenzie Bridge"}
+        ],
+        "serviceType": [
+          "Junk Removal","Residential Cleanout","Commercial Cleanout",
+          "Furniture Removal","Appliance Removal","Yard Debris Removal",
+          "Donation Pickup","Estate Cleanout","Garage Cleanout","Hoarder Cleanup"
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Junk Removal Services",
+          "itemListElement": [
+            {"@type":"Offer","itemOffered":{"@type":"Service","name":"Residential Cleanouts","description":"Garage, attic, basement, estate, and hoarder cleanups handled with care and discretion."}},
+            {"@type":"Offer","itemOffered":{"@type":"Service","name":"Furniture & Appliance Removal","description":"Safe removal and recycling of sofas, mattresses, fridges, washers, and dryers."}},
+            {"@type":"Offer","itemOffered":{"@type":"Service","name":"Yard & Debris Removal","description":"Storm cleanup, old fencing, brush piles, and demolition debris removal."}},
+            {"@type":"Offer","itemOffered":{"@type":"Service","name":"Commercial Cleanouts","description":"Office, storage unit, and rental property turnover cleanouts on your schedule."}},
+            {"@type":"Offer","itemOffered":{"@type":"Service","name":"Donation Pickup","description":"Routing usable furniture and goods to local Oregon charities with tax receipts provided."}}
+          ]
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "bestRating": "5",
+          "worstRating": "1",
+          "reviewCount": "47"
+        },
+        "sameAs": [
+          "https://www.facebook.com/profile.php?id=61590674730820"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much does junk removal cost in Oregon?",
+            "acceptedAnswer": {"@type":"Answer","text":"Pricing is based on how much space your items take up in our truck. Every job starts with a free, no-obligation estimate, and the price we quote is the price you pay — no hidden fees and no surprises at the end."}
+          },
+          {
+            "@type": "Question",
+            "name": "Do you offer same-day junk removal in Bend or Eugene?",
+            "acceptedAnswer": {"@type":"Answer","text":"Often, yes! We're open Monday–Saturday from 7am to 7pm with same-day slots frequently available, plus Sunday appointments by request. Call (541) 425-2008 early for the best chance at a same-day pickup."}
+          },
+          {
+            "@type": "Question",
+            "name": "What happens to my junk after pickup?",
+            "acceptedAnswer": {"@type":"Answer","text":"We divert about 70% of everything we collect away from the landfill. Usable items are donated to local Oregon charities and the rest is sorted for recycling wherever possible."}
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to move everything outside before the crew arrives?",
+            "acceptedAnswer": {"@type":"Answer","text":"Not at all. Just point to what you want gone and our crew does all the lifting and loading — from the attic, basement, backyard, or anywhere on your property."}
+          },
+          {
+            "@type": "Question",
+            "name": "What items won't Northwest Junk Pros take?",
+            "acceptedAnswer": {"@type":"Answer","text":"For safety and legal reasons we generally can't take hazardous materials like wet paint, chemicals, asbestos, or fuels. If you're unsure about a specific item, just call (541) 425-2008 and we'll point you in the right direction."}
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a href="#main" class="btn" style="position:absolute;left:-999px;top:0;z-index:100;">Skip to content</a>
@@ -86,23 +195,30 @@
         <span class="grid-overlay"></span>
       </div>
       <div class="container hero-inner">
-        <span class="eyebrow reveal">Central Oregon &amp; the Willamette Valley</span>
-        <h1 class="reveal d1">Junk gone today.<br><span class="accent">Hassle gone for good.</span></h1>
-        <p class="lead reveal d2">Northwest Junk Pros hauls away the stuff you're done with — fast, friendly, and upfront on price. We recycle and donate <strong style="color:#cfe9dc">70% of what we collect</strong>, so your clutter stays out of the landfill.</p>
-        <div class="hero-actions reveal d3">
-          <a class="btn btn-lg" href="#quote">Get a Free Quote
-            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a class="btn btn-ghost btn-lg" href="tel:+15414252008">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M3 5.5C3 4.7 3.7 4 4.5 4H7l1.5 4.5L6.7 10a12 12 0 0 0 5.3 5.3l1.5-1.8L18 15v2.5c0 .8-.7 1.5-1.5 1.5A14.5 14.5 0 0 1 3 5.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-            (541) 425-2008
-          </a>
+        <div class="hero-left">
+          <span class="eyebrow reveal">Central Oregon &amp; the Willamette Valley</span>
+          <h1 class="reveal d1">Junk gone today.<br><span class="accent">Hassle gone for good.</span></h1>
+          <p class="lead reveal d2">Northwest Junk Pros hauls away the stuff you're done with — fast, friendly, and upfront on price. We recycle and donate <strong style="color:#cfe9dc">70% of what we collect</strong>, so your clutter stays out of the landfill.</p>
+          <div class="hero-actions reveal d3">
+            <a class="btn btn-lg" href="#quote">Get a Free Quote
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-ghost btn-lg" href="tel:+15414252008">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M3 5.5C3 4.7 3.7 4 4.5 4H7l1.5 4.5L6.7 10a12 12 0 0 0 5.3 5.3l1.5-1.8L18 15v2.5c0 .8-.7 1.5-1.5 1.5A14.5 14.5 0 0 1 3 5.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              (541) 425-2008
+            </a>
+          </div>
+          <div class="trust-row reveal d4">
+            <span class="chip"><span class="stars" aria-hidden="true">★★★★★</span> 5-Star Rated</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Locally Owned &amp; Operated</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Same-Day Service</span>
+            <span class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 10l7-7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> No Hidden Fees</span>
+          </div>
         </div>
-        <div class="trust-row reveal d4">
-          <span class="chip"><span class="stars" aria-hidden="true">★★★★★</span> 5-Star Rated</span>
-          <span class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Locally Owned &amp; Operated</span>
-          <span class="chip"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Same-Day Service</span>
-          <span class="chip"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 10l7-7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> No Hidden Fees</span>
+        <div class="hero-right reveal d2">
+          <div class="hero-photo">
+            <img src="assets/hero-truck.jpg" alt="Northwest Junk Pros crew member standing beside the branded removal truck, ready to serve Central Oregon" loading="eager" />
+          </div>
         </div>
       </div>
     </section>
@@ -146,22 +262,22 @@
             <p>Storm cleanup, old fencing, brush piles, and demolition debris cleared so your yard is ready to enjoy again.</p>
             <ul><li>Fencing</li><li>Brush piles</li><li>Demolition debris</li></ul>
           </article>
-          <article class="card reveal">
+          <article class="card reveal d3">
             <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="7" width="16" height="13" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M4 11h16M9 7V4h6v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
             <h3>Commercial Cleanouts</h3>
             <p>Keep your business moving. We clear offices, storage units, and rental turnovers on a schedule that works for you.</p>
             <ul><li>Offices</li><li>Storage units</li><li>Rental properties</li></ul>
           </article>
-          <article class="card reveal d1">
+          <article class="card reveal d4">
             <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.3-7-9.5A3.5 3.5 0 0 1 12 8a3.5 3.5 0 0 1 7 3.5C19 16.7 12 21 12 21z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
             <h3>Donation Pickup</h3>
             <p>Still got life left in it? We'll route usable furniture and goods to local charities — and send you the receipt.</p>
             <ul><li>Furniture</li><li>Household goods</li><li>Tax receipts</li></ul>
           </article>
-          <article class="card reveal d2" style="display:flex;flex-direction:column;justify-content:center;background:linear-gradient(160deg,var(--green-deep),#0a3a1d);border-color:rgba(52,211,153,.3)">
-            <h3 style="font-size:1.45rem">Not sure if we take it?</h3>
-            <p style="color:#d6f0e0;margin-bottom:1.3rem">If it's not hazardous waste, chances are we'll haul it. Ask us — estimates are always free.</p>
-            <a class="btn btn-gold" href="#quote" style="align-self:flex-start">Ask for a Quote
+          <article class="card card-cta reveal d5">
+            <h3>Not sure if we take it?</h3>
+            <p>If it's not hazardous waste, chances are we'll haul it. Ask us — estimates are always free.</p>
+            <a class="btn btn-gold" href="#quote">Ask for a Quote
               <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </article>
