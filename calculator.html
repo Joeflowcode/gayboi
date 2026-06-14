@@ -273,6 +273,42 @@
 </head>
 <body>
 
+<!-- PASSWORD GATE -->
+<style>
+#pw-gate{position:fixed;inset:0;z-index:99999;background:#0a0f0d;display:flex;align-items:center;justify-content:center;font-family:sans-serif}
+#pw-gate.hidden{display:none}
+#pw-box{background:#122016;border:1px solid rgba(52,211,153,.2);border-radius:12px;padding:36px 40px;text-align:center;width:320px}
+#pw-box h2{color:#34d399;font-size:20px;margin-bottom:6px;letter-spacing:.02em}
+#pw-box p{color:#4a7a5c;font-size:13px;margin-bottom:20px}
+#pw-input{width:100%;padding:10px 14px;background:#0a0f0d;border:1px solid rgba(52,211,153,.25);border-radius:6px;color:#d6f5e3;font-size:14px;text-align:center;letter-spacing:.12em;outline:none;margin-bottom:12px;box-sizing:border-box}
+#pw-input:focus{border-color:#34d399}
+#pw-submit{width:100%;padding:11px;background:#34d399;color:#0a0f0d;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.04em}
+#pw-submit:hover{opacity:.88}
+#pw-err{color:#f87171;font-size:12px;margin-top:10px;min-height:18px}
+</style>
+<div id="pw-gate">
+  <div id="pw-box">
+    <h2>Northwest Junk Pros</h2>
+    <p>Owner access only</p>
+    <input id="pw-input" type="password" placeholder="Enter password" autocomplete="current-password">
+    <button id="pw-submit" onclick="checkPw()">Enter</button>
+    <div id="pw-err"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const KEY='nwjp_auth', HASH='anVuaw==';
+  if(sessionStorage.getItem(KEY)===HASH) document.getElementById('pw-gate').classList.add('hidden');
+  document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPw()});
+  window.checkPw=function(){
+    const v=document.getElementById('pw-input').value;
+    if(btoa(v)===HASH){sessionStorage.setItem(KEY,HASH);document.getElementById('pw-gate').classList.add('hidden');}
+    else{document.getElementById('pw-err').textContent='Incorrect password.';document.getElementById('pw-input').value='';}
+  };
+})();
+</script>
+<!-- END PASSWORD GATE -->
+
 <header>
   <h1>Northwest Junk Removal</h1>
   <p>Job Pricing Calculator</p>

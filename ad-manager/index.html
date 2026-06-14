@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ad Campaign Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ── THEME TOKENS ───────────────────────────────────────────── */
+:root {
+  --A:  #3ddc84;   /* accent */
+  --A2: #26a85e;   /* accent dark */
+  --Ag: rgba(61,220,132,.12);
+  --Ab: rgba(61,220,132,.06);
+  --BG0:#07100a;
+  --BG1:#0c180e;
+  --BG2:#122016;
+  --BG3:#192d1e;
+  --B0: rgba(61,220,132,.08);
+  --B1: rgba(61,220,132,.18);
+  --T0: #d6f5e3;
+  --T1: #7fba99;
+  --T2: #4a7a5c;
+  --T3: #2a4d35;
+  --SB: #060d08;
+  --R:  8px;
+  --trans: .35s cubic-bezier(.4,0,.2,1);
+}
+body.cl {
+  --A:  #d4af37;
+  --A2: #a07e1a;
+  --Ag: rgba(212,175,55,.12);
+  --Ab: rgba(212,175,55,.06);
+  --BG0:#060810;
+  --BG1:#080c1c;
+  --BG2:#0d1228;
+  --BG3:#121a38;
+  --B0: rgba(212,175,55,.08);
+  --B1: rgba(212,175,55,.18);
+  --T0: #eef0ff;
+  --T1: #8899cc;
+  --T2: #4a5a8a;
+  --T3: #252e55;
+  --SB: #05060e;
+}
+
+/* ── RESET ──────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+
+body {
+  font-family:'DM Mono',monospace;
+  background:var(--BG0);
+  color:var(--T0);
+  display:flex;
+  transition:background var(--trans),color var(--trans);
+}
+
+/* ── SIDEBAR ────────────────────────────────────────────────── */
+.sb {
+  width:220px;flex-shrink:0;
+  background:var(--SB);
+  border-right:1px solid var(--B0);
+  display:flex;flex-direction:column;
+  height:100vh;overflow:hidden;
+  position:relative;z-index:50;
+}
+
+.sb-logo {
+  padding:22px 18px 16px;
+  border-bottom:1px solid var(--B0);
+}
+.sb-logo-eyebrow {
+  font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--T3);font-weight:500;margin-bottom:4px;
+}
+.sb-logo-name {
+  font-family:'Syne',sans-serif;font-size:17px;font-weight:800;
+  color:var(--A);line-height:1.1;
+  text-shadow:0 0 24px var(--Ag);
+}
+
+/* Business switcher */
+.sb-biz {
+  padding:14px 16px;
+  border-bottom:1px solid var(--B0);
+}
+.sb-biz-label {
+  font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--T3);font-weight:500;margin-bottom:8px;
+}
+.biz-btn {
+  width:100%;padding:9px 11px;
+  border-radius:6px;border:1px solid var(--B0);
+  background:transparent;color:var(--T2);
+  font-family:'Syne',sans-serif;font-size:11px;font-weight:700;
+  cursor:pointer;text-align:left;margin-bottom:5px;
+  transition:all .2s;display:flex;align-items:center;gap:7px;
+  letter-spacing:.02em;
+}
+.biz-btn:last-child{margin-bottom:0}
+.biz-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.biz-btn.on{background:var(--Ag);border-color:var(--A);color:var(--A)}
+.biz-btn:hover:not(.on){border-color:var(--B1);color:var(--T0)}
+
+/* Nav */
+.sb-nav{padding:14px 12px;flex:1}
+.nav-item {
+  display:flex;align-items:center;gap:9px;
+  padding:9px 10px;border-radius:6px;
+  cursor:pointer;font-size:12px;font-weight:400;
+  color:var(--T2);transition:all .15s;
+  margin-bottom:2px;border:1px solid transparent;
+  letter-spacing:.02em;
+}
+.nav-item:hover{background:var(--BG2);color:var(--T0)}
+.nav-item.on{background:var(--Ag);color:var(--A);border-color:var(--B0)}
+.nav-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+
+/* ── MAIN ───────────────────────────────────────────────────── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+.main-hdr {
+  padding:20px 32px 16px;
+  border-bottom:1px solid var(--B0);
+  background:var(--BG0);
+  flex-shrink:0;
+}
+.main-hdr-title{
+  font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  color:var(--T0);line-height:1;
+}
+.main-hdr-sub{font-size:10px;color:var(--T2);margin-top:5px;letter-spacing:.04em}
+
+.main-body{flex:1;overflow-y:auto;padding:24px 32px}
+
+/* ── PANELS ─────────────────────────────────────────────────── */
+.panel{display:none}
+.panel.on{display:block;animation:fadeUp .22s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARDS ──────────────────────────────────────────────────── */
+.card {
+  background:var(--BG2);
+  border:1px solid var(--B0);
+  border-radius:var(--R);
+  padding:20px 22px;
+  margin-bottom:16px;
+  transition:border-color .2s;
+}
+.card:hover{border-color:var(--B1)}
+.card-hdr{
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:var(--T2);margin-bottom:14px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+
+/* ── FORM ───────────────────────────────────────────────────── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.fg{margin-bottom:14px}
+.fg:last-child{margin-bottom:0}
+label{
+  display:block;font-size:9px;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--T2);margin-bottom:5px;
+}
+select,input,textarea {
+  width:100%;
+  background:var(--BG1);
+  border:1px solid var(--B0);
+  border-radius:5px;
+  color:var(--T0);
+  font-family:'DM Mono',monospace;
+  font-size:12px;padding:9px 11px;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  appearance:none;
+}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a7a5c'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+body.cl select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a5a8a'/%3E%3C/svg%3E")}
+select:focus,input:focus,textarea:focus{border-color:var(--A);box-shadow:0 0 0 3px var(--Ag)}
+select option{background:var(--BG2)}
+textarea{resize:vertical;line-height:1.65;font-size:12px}
+
+/* ── TONE SELECTOR ──────────────────────────────────────────── */
+.tones{display:flex;gap:6px}
+.tone-btn{
+  flex:1;padding:8px 6px;border-radius:5px;
+  border:1px solid var(--B0);background:transparent;
+  color:var(--T2);font-family:'DM Mono',monospace;font-size:10px;
+  cursor:pointer;transition:all .2s;text-align:center;letter-spacing:.03em;
+}
+.tone-btn.on{background:var(--Ag);border-color:var(--A);color:var(--A)}
+.tone-btn:hover:not(.on){border-color:var(--B1);color:var(--T0)}
+
+/* ── BUTTONS ────────────────────────────────────────────────── */
+.btn{
+  padding:9px 16px;border-radius:6px;border:none;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all .18s;
+  display:inline-flex;align-items:center;gap:6px;letter-spacing:.03em;
+}
+.btn-p{background:var(--A);color:var(--BG0)}
+.btn-p:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 4px 18px var(--Ag)}
+.btn-s{background:var(--BG3);color:var(--T0);border:1px solid var(--B0)}
+.btn-s:hover{border-color:var(--B1);background:var(--BG2)}
+.btn-d{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.18)}
+.btn-d:hover{background:rgba(239,68,68,.18)}
+.btn-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+
+/* Generate CTA */
+.gen-btn{
+  width:100%;padding:13px;margin-top:4px;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;
+  background:var(--A);color:var(--BG0);
+  border:none;border-radius:7px;cursor:pointer;
+  position:relative;overflow:hidden;transition:all .2s;
+}
+.gen-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  transform:translateX(-100%);transition:transform .5s;
+}
+.gen-btn:hover::before{transform:translateX(100%)}
+.gen-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px var(--Ag)}
+.gen-btn:active{transform:translateY(0)}
+
+/* ── COMPOSE LAYOUT ─────────────────────────────────────────── */
+.compose-grid{display:grid;grid-template-columns:320px 1fr;gap:16px}
+
+/* ── AD OUTPUT ──────────────────────────────────────────────── */
+.ad-out{
+  min-height:260px;background:var(--BG1);
+  border:1px solid var(--B0);border-radius:5px;
+  color:var(--T0);font-family:'DM Mono',monospace;
+  font-size:12px;padding:12px;line-height:1.7;
+  outline:none;resize:vertical;
+  transition:border-color .2s,box-shadow .2s;
+}
+.ad-out:focus{border-color:var(--A);box-shadow:0 0 0 3px var(--Ag)}
+.char-ct{font-size:9px;color:var(--T2);text-align:right;margin-top:5px}
+
+/* ── PLATFORM BADGES ────────────────────────────────────────── */
+.pbadge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:20px;
+  font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+}
+.pf{background:rgba(24,119,242,.12);color:#60a5fa;border:1px solid rgba(24,119,242,.2)}
+.pc{background:rgba(154,205,50,.1);color:#a3e635;border:1px solid rgba(154,205,50,.2)}
+.pn{background:rgba(16,185,129,.1);color:#34d399;border:1px solid rgba(16,185,129,.2)}
+.pa{background:rgba(249,115,22,.1);color:#fb923c;border:1px solid rgba(249,115,22,.2)}
+.pt{background:rgba(99,102,241,.1);color:#818cf8;border:1px solid rgba(99,102,241,.2)}
+.pg{background:rgba(234,179,8,.1);color:#fbbf24;border:1px solid rgba(234,179,8,.2)}
+.pclass={facebook:'pf',craigslist:'pc',nextdoor:'pn',angi:'pa',thumbtack:'pt',google:'pg'}
+
+/* ── SCHEDULE TABLE ─────────────────────────────────────────── */
+.sched-tbl{width:100%;border-collapse:collapse}
+.sched-tbl th{
+  text-align:left;font-size:8px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--T2);
+  padding:0 10px 10px;border-bottom:1px solid var(--B0);
+}
+.sched-tbl td{
+  padding:11px 10px;font-size:11px;
+  border-bottom:1px solid var(--B0);vertical-align:middle;
+}
+.sched-tbl tr:last-child td{border-bottom:none}
+.sched-tbl tbody tr:hover td{background:var(--BG3)}
+
+/* ── STATUS ─────────────────────────────────────────────────── */
+.sbadge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:9px;font-weight:600}
+.s-ok{background:rgba(74,222,128,.1);color:#4ade80}
+.s-soon{background:rgba(251,191,36,.1);color:#fbbf24}
+.s-over{background:rgba(248,113,113,.1);color:#f87171}
+.sdot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* ── HISTORY ────────────────────────────────────────────────── */
+.hist-item{
+  padding:13px 16px;border-bottom:1px solid var(--B0);
+  cursor:pointer;transition:background .15s;
+  display:flex;gap:12px;align-items:flex-start;
+}
+.hist-item:last-child{border-bottom:none}
+.hist-item:hover{background:var(--BG3)}
+.hist-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--T0);margin-bottom:3px}
+.hist-prev{font-size:11px;color:var(--T1);line-height:1.5}
+.hist-meta{flex-shrink:0;text-align:right;min-width:100px}
+.hist-date{font-size:9px;color:var(--T2)}
+.hist-restore{font-size:9px;color:var(--A);margin-top:5px;letter-spacing:.05em}
+
+/* ── SETTINGS ───────────────────────────────────────────────── */
+.set-sect{margin-bottom:24px}
+.set-title{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+  color:var(--T0);margin-bottom:14px;padding-bottom:9px;
+  border-bottom:1px solid var(--B0);
+}
+.svc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.svc-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 9px;border-radius:4px;
+  background:var(--BG3);border:1px solid var(--B0);
+  font-size:10px;color:var(--T1);
+}
+.svc-rm{cursor:pointer;color:var(--T2);font-size:13px;line-height:1;transition:color .15s}
+.svc-rm:hover{color:#f87171}
+
+/* ── MODAL ──────────────────────────────────────────────────── */
+.modal-ov{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);
+  backdrop-filter:blur(5px);z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--BG2);border:1px solid var(--B1);
+  border-radius:10px;padding:26px;width:440px;max-width:90vw;
+  transform:scale(.95);transition:transform .2s;
+}
+.modal-ov.open .modal{transform:scale(1)}
+.modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--T0);margin-bottom:18px}
+
+/* ── PLATFORM INFO ──────────────────────────────────────────── */
+.plat-info{font-size:11px;color:var(--T1);line-height:1.7}
+.plat-info strong{color:var(--T0)}
+.plat-link{color:var(--A);text-decoration:none;font-size:10px;opacity:.8;transition:opacity .15s}
+.plat-link:hover{opacity:1}
+
+/* ── EMPTY STATE ────────────────────────────────────────────── */
+.empty{text-align:center;padding:44px 20px;color:var(--T2)}
+.empty-ico{font-size:42px;margin-bottom:12px;opacity:.35}
+.empty-txt{font-size:11px;line-height:1.7}
+
+/* ── TOAST ──────────────────────────────────────────────────── */
+.toast{
+  position:fixed;bottom:20px;right:20px;
+  background:var(--BG3);border:1px solid var(--A);
+  border-radius:7px;padding:10px 16px;
+  font-size:12px;color:var(--A);z-index:999;
+  transform:translateY(60px);opacity:0;pointer-events:none;
+  transition:all .28s cubic-bezier(.4,0,.2,1);
+}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── GENERATED BADGE ────────────────────────────────────────── */
+.gen-badge{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:2px 7px;background:var(--Ag);border:1px solid var(--A);
+  color:var(--A);border-radius:4px;
+  font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--B1);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--T2)}
+
+/* ── DIVIDER ────────────────────────────────────────────────── */
+.div{height:1px;background:var(--B0);margin:16px 0}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<style>
+#pw-gate{position:fixed;inset:0;z-index:99999;background:#07100a;display:flex;align-items:center;justify-content:center;font-family:sans-serif}
+#pw-gate.hidden{display:none}
+#pw-box{background:#122016;border:1px solid rgba(61,220,132,.2);border-radius:12px;padding:36px 40px;text-align:center;width:320px}
+#pw-box h2{color:#3ddc84;font-size:20px;margin-bottom:6px;letter-spacing:.02em}
+#pw-box p{color:#4a7a5c;font-size:13px;margin-bottom:20px}
+#pw-input{width:100%;padding:10px 14px;background:#0c180e;border:1px solid rgba(61,220,132,.25);border-radius:6px;color:#d6f5e3;font-size:14px;text-align:center;letter-spacing:.12em;outline:none;margin-bottom:12px;box-sizing:border-box}
+#pw-input:focus{border-color:#3ddc84}
+#pw-submit{width:100%;padding:11px;background:#3ddc84;color:#07100a;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.04em}
+#pw-submit:hover{opacity:.88}
+#pw-err{color:#f87171;font-size:12px;margin-top:10px;min-height:18px}
+</style>
+<div id="pw-gate">
+  <div id="pw-box">
+    <h2>Ad Campaign Manager</h2>
+    <p>Owner access only</p>
+    <input id="pw-input" type="password" placeholder="Enter password" autocomplete="current-password">
+    <button id="pw-submit" onclick="checkPw()">Enter</button>
+    <div id="pw-err"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const KEY='nwjp_auth', HASH='anVuaw==';
+  if(sessionStorage.getItem(KEY)===HASH) document.getElementById('pw-gate').classList.add('hidden');
+  document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPw()});
+  window.checkPw=function(){
+    const v=document.getElementById('pw-input').value;
+    if(btoa(v)===HASH){sessionStorage.setItem(KEY,HASH);document.getElementById('pw-gate').classList.add('hidden');}
+    else{document.getElementById('pw-err').textContent='Incorrect password.';document.getElementById('pw-input').value='';}
+  };
+})();
+</script>
+<!-- END PASSWORD GATE -->
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-eyebrow">Ad Campaign</div>
+    <div class="sb-logo-name">Manager</div>
+  </div>
+
+  <div class="sb-biz">
+    <div class="sb-biz-label">Active Business</div>
+    <div id="bizBtns"></div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="nav-item on" id="nav-compose" onclick="goPanel('compose')">
+      <span class="nav-icon">✍️</span>Compose Ad
+    </div>
+    <div class="nav-item" id="nav-schedule" onclick="goPanel('schedule')">
+      <span class="nav-icon">📅</span>Schedule
+    </div>
+    <div class="nav-item" id="nav-history" onclick="goPanel('history')">
+      <span class="nav-icon">📋</span>History
+    </div>
+    <div class="nav-item" id="nav-settings" onclick="goPanel('settings')">
+      <span class="nav-icon">⚙️</span>Settings
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="main-hdr">
+    <div class="main-hdr-title" id="pageTitle">Compose Ad</div>
+    <div class="main-hdr-sub" id="pageSub">Generate platform-optimized ad copy for your business</div>
+  </div>
+
+  <div class="main-body">
+
+    <!-- COMPOSE -->
+    <div class="panel on" id="panel-compose">
+      <div class="compose-grid">
+
+        <!-- Left: Controls -->
+        <div>
+          <div class="card">
+            <div class="card-hdr">📣 Ad Settings</div>
+
+            <div class="fg">
+              <label>Service / Offer</label>
+              <select id="svcSel"></select>
+            </div>
+
+            <div class="fg">
+              <label>Target Platform</label>
+              <select id="platSel">
+                <option value="facebook">📘 Facebook Group</option>
+                <option value="craigslist">🗂 Craigslist</option>
+                <option value="nextdoor">🏘 Nextdoor</option>
+                <option value="angi">🔧 Angi</option>
+                <option value="thumbtack">📌 Thumbtack</option>
+                <option value="google">⭐ Google Business Post</option>
+              </select>
+            </div>
+
+            <div class="fg">
+              <label>Ad Tone</label>
+              <div class="tones">
+                <button class="tone-btn on" data-t="urgent"   onclick="setTone(this)">🔥 Urgent</button>
+                <button class="tone-btn"    data-t="friendly" onclick="setTone(this)">😊 Friendly</button>
+                <button class="tone-btn"    data-t="premium"  onclick="setTone(this)">✨ Premium</button>
+              </div>
+            </div>
+
+            <button class="gen-btn" onclick="genAd()">⚡ Generate Ad</button>
+          </div>
+
+          <div class="card" id="platInfoCard" style="display:none">
+            <div class="card-hdr">💡 Platform Tips</div>
+            <div class="plat-info" id="platInfo"></div>
+          </div>
+        </div>
+
+        <!-- Right: Output -->
+        <div>
+          <div class="card">
+            <div class="card-hdr">
+              <span>📝 Ad Copy</span>
+              <span id="genBadge" style="display:none"><span class="gen-badge">✓ Generated</span></span>
+            </div>
+
+            <textarea class="ad-out" id="adOut"
+              placeholder="Choose your settings on the left, then click ⚡ Generate Ad..."></textarea>
+            <div class="char-ct" id="charCt">0 characters</div>
+
+            <div class="btn-row">
+              <button class="btn btn-p" onclick="doCopy()">📋 Copy</button>
+              <button class="btn btn-s" onclick="openPlat()">🔗 Open Platform</button>
+              <button class="btn btn-s" onclick="saveHist()">💾 Save</button>
+              <button class="btn btn-s" onclick="genAd()">↺ Regenerate</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="panel" id="panel-schedule">
+      <div class="card">
+        <div class="card-hdr">
+          <span>📅 Posting Schedule</span>
+          <button class="btn btn-p" style="padding:7px 12px;font-size:11px" onclick="openSchedModal()">+ Add</button>
+        </div>
+        <div id="schedList"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="panel" id="panel-history">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:16px 20px 13px;border-bottom:1px solid var(--B0)">
+          <div class="card-hdr" style="margin-bottom:0">📋 Ad History <span style="font-size:9px;font-weight:400;color:var(--T2)">(last 20)</span></div>
+        </div>
+        <div id="histList"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="panel" id="panel-settings">
+      <div id="setContent"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- SCHEDULE MODAL -->
+<div class="modal-ov" id="schedModal">
+  <div class="modal">
+    <div class="modal-title">Add Posting Schedule</div>
+    <div class="form-row">
+      <div class="fg">
+        <label>Platform</label>
+        <select id="mPlatSel">
+          <option value="facebook">Facebook Group</option>
+          <option value="craigslist">Craigslist</option>
+          <option value="nextdoor">Nextdoor</option>
+          <option value="angi">Angi</option>
+          <option value="thumbtack">Thumbtack</option>
+          <option value="google">Google Business</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Service</label>
+        <select id="mSvcSel"></select>
+      </div>
+    </div>
+    <div class="fg">
+      <label>Post every N days</label>
+      <input type="number" id="mFreq" value="7" min="1" max="90">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-p" onclick="addSched()">Add Schedule</button>
+      <button class="btn btn-s" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ================================================================
+// STATE
+// ================================================================
+const DEFAULTS = [
+  {
+    id:'nwjunkpros', theme:'',
+    name:'Northwest Junk Pros',
+    tagline:"Seattle's Premier Junk Removal & Property Cleanup Crew",
+    phone:'(206) 555-0000', website:'www.northwestjunkpros.com',
+    location:'Seattle, WA',
+    services:['Junk Removal','Power Washing','Gutter Cleaning','Landscaping',
+      'Pinecone Removal','Yard Cleanup','Furniture Removal','Appliance Removal',
+      'Debris Hauling','Estate Cleanouts'],
+    pts:['Same-day service','Free quotes','Fully insured','Eco-friendly disposal','Serving greater Seattle']
+  },
+  {
+    id:'clearlineai', theme:'cl',
+    name:'ClearLine AI',
+    tagline:'AI Phone & Chat Agents for Credit Unions',
+    phone:'(800) 555-0000', website:'www.clearlineai.com',
+    location:'Seattle, WA',
+    services:['AI Phone Agent','AI Chat Agent','24/7 Member Support Automation',
+      'Loan Inquiry Automation','Account Support Bot'],
+    pts:['Reduce hold times 80%+','24/7 availability','No code required','90-day ROI','Seamless integration']
+  }
+];
+
+let S = { bizs:[], activeId:'nwjunkpros', schedules:[], history:[], tone:'urgent' };
+
+const PCLASS = {facebook:'pf',craigslist:'pc',nextdoor:'pn',angi:'pa',thumbtack:'pt',google:'pg'};
+const PNAME  = {facebook:'Facebook',craigslist:'Craigslist',nextdoor:'Nextdoor',angi:'Angi',thumbtack:'Thumbtack',google:'Google Business'};
+const PURL   = {
+  facebook:'https://www.facebook.com/groups/',
+  craigslist:'https://seattle.craigslist.org/post/',
+  nextdoor:'https://nextdoor.com/',
+  angi:'https://pro.angi.com/',
+  thumbtack:'https://www.thumbtack.com/pro/',
+  google:'https://business.google.com/'
+};
+const PTIPS = {
+  facebook:'Post in local community & neighborhood groups.\nBest times: Tue–Thu 9 am–12 pm.\nRespond to every comment within minutes.\nIdeal length: 120–300 words.',
+  craigslist:'Post under Services → Skilled Trades.\nRenew every 48 h for visibility.\nKeep it plain text — no HTML.\nList your phone prominently at top and bottom.',
+  nextdoor:'Post as a Local Business in the Services section.\nHyper-local tone performs best.\nDo not post more than once a week — you may get flagged.\nEngage with every reply promptly.',
+  angi:'Ensure your Angi Pro profile has photos and reviews.\nRespond to new leads within 5 minutes.\nBid on jobs actively — speed wins here.',
+  thumbtack:'Set a weekly budget for lead credits.\nFill out every profile field with keywords.\nRespond instantly — first responder usually wins.',
+  google:'Posts expire after 7 days — schedule renewals.\nKeep it under 300 words.\nAdd a photo when possible.\nPost at least twice a month for algorithm visibility.'
+};
+
+// ================================================================
+// STORAGE
+// ================================================================
+function save(){ localStorage.setItem('adm_v3', JSON.stringify(S)) }
+function load(){
+  const raw = localStorage.getItem('adm_v3');
+  if(raw){ try{ Object.assign(S, JSON.parse(raw)); if(!S.bizs?.length) S.bizs=DEFAULTS; }catch(e){ S.bizs=DEFAULTS; } }
+  else S.bizs=DEFAULTS;
+}
+
+// ================================================================
+// BUSINESS HELPERS
+// ================================================================
+function biz(){ return S.bizs.find(b=>b.id===S.activeId)||S.bizs[0] }
+
+function switchBiz(id){
+  S.activeId=id; save();
+  document.body.className = S.bizs.find(b=>b.id===id)?.theme||'';
+  renderBizBtns(); renderSvcSel('#svcSel'); renderSvcSel('#mSvcSel');
+  renderSettings();
+}
+
+// ================================================================
+// SEASONAL HOOK
+// ================================================================
+function seasonal(){
+  const m=new Date().getMonth();
+  const junk=[
+    "January is the perfect time to clear out the holiday clutter and start fresh.",
+    "February home refresh — make space for what actually matters this year.",
+    "Spring is here. Time to tackle the cleanout you've been putting off all winter.",
+    "April showers bring May flowers — and a yard full of winter debris. Let's clear it.",
+    "Get your property summer-ready before the heat hits Seattle.",
+    "Summer entertaining season is on. Let's get your space looking its best.",
+    "Mid-summer is prime time to clear out that garage or shed you've been avoiding.",
+    "End-of-summer cleanout — get ahead of fall before the rain returns.",
+    "Fall cleanup season is here. Gutters, leaves, and yard debris — we handle it all.",
+    "October means gutters clogged with leaves. Don't wait until it causes damage.",
+    "Before the holidays, clear out the clutter to make room for what matters.",
+    "Year-end cleanout — start the new year with a clean, organized home."
+  ];
+  const ai=[
+    "New year, new member experience. Q1 is the ideal time to modernize your support.",
+    "Help members connect faster in 2025 — upgrade to AI-powered support this quarter.",
+    "Spring clean your operations — replace outdated hold queues with instant AI response.",
+    "Q2 is ideal for implementing AI support before summer staffing gaps hit.",
+    "Summer staffing shortfalls? Our AI agents never call in sick or take vacations.",
+    "Mid-year check: are your members still waiting on hold? They shouldn't have to be.",
+    "Q3 planning: set your credit union up for Q4 success with AI member support.",
+    "Budget season is here. AI agent ROI typically pays back within 90 days.",
+    "September means planning next year's tech stack — don't leave AI off the roadmap.",
+    "Q4 budget planning: lock in your AI support rollout before year-end.",
+    "Beat the holiday service rush with AI agents that handle unlimited simultaneous calls.",
+    "Year-end special — implement now and be fully ready for January's member surge."
+  ];
+  return biz().id==='clearlineai' ? ai[m] : junk[m];
+}
+
+// ================================================================
+// AD TEMPLATE ENGINE
+// ================================================================
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+
+function genAd(){
+  const b=biz(), svc=document.getElementById('svcSel').value,
+        plat=document.getElementById('platSel').value, t=S.tone;
+  if(!svc){ toast('Select a service first.'); return; }
+
+  let ad='';
+  if(b.id==='nwjunkpros') ad=buildJunk(b,svc,plat,t);
+  else ad=buildAI(b,svc,plat,t);
+
+  document.getElementById('adOut').value=ad;
+  updateCC(); document.getElementById('genBadge').style.display='inline';
+  showPlatInfo(plat);
+}
+
+// ── NORTHWEST JUNK PROS ──────────────────────────────────────────
+function buildJunk(b,svc,plat,tone){
+  const s=seasonal(),ph=b.phone,web=b.website,tag=b.tagline;
+  const svcL=svc.toLowerCase();
+  const slug=svc.replace(/\s+/g,'');
+
+  const tpl={
+    facebook:{
+      urgent:[
+`🚨 OPENINGS THIS WEEK — ${svc.toUpperCase()} 🚨
+
+Hey Seattle neighbors! Northwest Junk Pros here. We had a couple cancellations and can fit in a few more ${svcL} jobs this week.
+
+${s}
+
+Why hundreds of Seattle homeowners choose us:
+✅ Same-day and next-day availability
+✅ Free, no-pressure quotes
+✅ Fully licensed & insured
+✅ Eco-friendly — we donate & recycle before we dump
+✅ Uniformed crew, on time every time
+
+Whether it's one piece or a full cleanout, we show up, we haul it, we're gone. Simple.
+
+📞 Call/text: ${ph}
+💬 Or DM us for a quick quote
+
+Tag someone who's been putting off their ${svcL}! 👇
+
+#NorthwestJunkPros #Seattle${slug} #SeattleJunkRemoval`,
+
+`⚡ LIMITED SPOTS — ${svc.toUpperCase()} — SEATTLE
+
+We're booking fast this week and have just a few openings left for ${svcL} in the Seattle area.
+
+${s}
+
+Here's why we keep getting called back:
+🏆 5-star reputation across Seattle & Eastside
+🌿 Eco-conscious disposal — we donate usable items first
+📋 Upfront pricing — no surprises, no hidden fees
+⏱ We work on YOUR schedule, including weekends
+💪 No job too big, no job too small
+
+Stop looking at that pile. One text and we handle the rest.
+
+📲 Text us now: ${ph}
+🌐 ${web}
+
+Drop a "YES" in the comments if you want us to reach out! 👇
+
+#${slug}Seattle #JunkRemoval #LocalAndProud`
+      ],
+      friendly:[
+`Hey neighbors! 👋
+
+Just wanted to pop in and say hi — we're Northwest Junk Pros, your local team for ${svcL} and property cleanup across the greater Seattle area.
+
+${s}
+
+We know life gets busy and stuff piles up. No judgment here — it's literally what we're here for. We make the whole process easy:
+
+1️⃣ Reach out (call, text, or DM)
+2️⃣ Get a free, honest quote
+3️⃣ We show up and take care of everything
+4️⃣ You enjoy the clean space 🎉
+
+We're your neighbors, not a giant faceless company. We care about doing good work and treating your home with respect.
+
+📞 ${ph}
+🌐 ${web}
+
+Know someone who needs ${svcL}? Tag them below — we'd love to help! 💚`,
+
+`Good morning, Seattle! ☀️
+
+Quick note from the Northwest Junk Pros team — we're here whenever you're ready to tackle that ${svcL} project you've been thinking about.
+
+${s}
+
+A few things that make us different:
+💚 We're LOCAL — this is our community too
+🔄 We donate and recycle what we can — better for Seattle
+😊 No hard sell, no pressure — just honest, friendly service
+📅 Flexible scheduling that works around you
+
+Serving Seattle, Bellevue, Redmond, Kirkland, Bothell, Renton & beyond.
+
+Give us a call or send a DM — we'd love to earn your trust!
+📞 ${ph}
+
+Have a great day, everyone! 🌧️☀️ (this IS Seattle after all)
+
+#NWJunkPros #SeattleLocal #${slug}`
+      ],
+      premium:[
+`Northwest Junk Pros | Professional ${svc} — Greater Seattle
+
+${s}
+
+When you want the job done right the first time, Seattle homeowners trust Northwest Junk Pros.
+
+Our standard on every job:
+◆ Prompt, uniformed, professional crew
+◆ Full liability coverage for complete peace of mind
+◆ Detailed written estimate before any work begins
+◆ Eco-responsible disposal — donation and recycling first
+◆ Same-day availability for time-sensitive needs
+◆ Property treated with the same respect as our own
+
+We don't rush and we don't cut corners. Our reputation in this community is everything to us.
+
+Ready to experience the Northwest Junk Pros difference?
+
+📞 ${ph}
+🌐 ${web}
+
+#ProfessionalService #Seattle${slug} #NorthwestJunkPros #${tag.split(' ').slice(0,2).join('')}`
+      ]
+    },
+    craigslist:{
+      urgent:[
+`${svc.toUpperCase()} — FAST, AFFORDABLE — NORTHWEST JUNK PROS — SEATTLE
+
+>>> LIMITED AVAILABILITY THIS WEEK <<<
+
+${s}
+
+Northwest Junk Pros provides professional ${svcL} throughout the greater Seattle area. We are fully licensed, bonded, and insured. Call or text TODAY to lock in your slot.
+
+WHAT WE DO:
+- ${svc} — residential and commercial
+- Free on-site estimates (no obligation)
+- Same-day and next-day scheduling
+- Eco-friendly disposal (donate & recycle first)
+- No hidden fees — transparent upfront pricing
+
+WHY US:
+✓ Fully licensed & insured
+✓ Local Seattle business
+✓ Professional uniformed crew
+✓ 5-star track record
+
+SERVICE AREA:
+Seattle, Bellevue, Redmond, Kirkland, Bothell, Renton, Kent, Federal Way, Tacoma and surrounding cities.
+
+CALL/TEXT NOW: ${ph}
+WEBSITE: ${web}
+
+We respond fast. Don't let the clutter wait any longer.
+
+--
+DO NOT send spam or solicitations.`
+      ],
+      friendly:[
+`PROFESSIONAL ${svc.toUpperCase()} — SEATTLE / EASTSIDE — FREE ESTIMATES
+
+${s}
+
+Hi there! Northwest Junk Pros here — your friendly, local ${svcL} crew serving the greater Seattle area.
+
+We've helped hundreds of Seattle homeowners and businesses clear their space, and we'd love to help you too.
+
+OUR SERVICES:
+- ${svc}
+- Full property cleanouts
+- Single-item pickups
+- Commercial & residential
+
+WHAT MAKES US DIFFERENT:
+- We're LOCAL — not a franchise
+- We donate usable items to local charities
+- Honest, upfront pricing — no surprises
+- Licensed & insured for your protection
+
+SCHEDULING:
+We work around YOUR schedule, including weekends and evenings.
+
+CONTACT:
+Phone/Text: ${ph}
+Website: ${web}
+
+Feel free to reply to this post or call/text us directly. We typically respond within the hour.
+
+Serving all of King and Snohomish County.`
+      ],
+      premium:[
+`PREMIUM ${svc.toUpperCase()} SERVICE — NORTHWEST JUNK PROS — SEATTLE
+
+${s}
+
+Northwest Junk Pros delivers professional-grade ${svcL} services to residential and commercial clients throughout the greater Seattle area.
+
+SERVICE HIGHLIGHTS:
+- Same-day and next-day availability
+- Free on-site estimates with no obligation
+- Transparent, upfront pricing — zero hidden fees
+- Full liability insurance for your protection
+- Eco-responsible disposal protocol
+- Uniformed, background-checked crew
+- Before & after documentation available
+
+SERVICE TERRITORY:
+Seattle, Bellevue, Redmond, Kirkland, Bothell, Renton, Kent, Federal Way, Tacoma, and surrounding communities.
+
+CONTACT US:
+Phone/Text: ${ph}
+Website: ${web}
+
+We pride ourselves on doing the job right. Contact us today to schedule your complimentary estimate.
+
+DO NOT SEND SPAM OR SOLICITATIONS.`
+      ]
+    },
+    nextdoor:{
+      urgent:[
+`Hi neighbors!
+
+Quick heads up — Northwest Junk Pros has a few last-minute openings this week for ${svcL} in our area.
+
+${s}
+
+We're a local Seattle business (not a franchise) and we take real pride in serving our own community well. Every job includes:
+• Free, no-pressure quote
+• On-time arrival
+• Eco-friendly disposal — we donate usable items locally
+• Full insurance coverage
+
+If you or anyone you know has been putting off ${svcL}, now's a great time to get it done.
+
+Call or text us: ${ph}
+Or DM me directly and I'll get you a quick quote.
+
+Thanks for being such a great neighborhood! 🏡`
+      ],
+      friendly:[
+`Hello neighbors! 👋
+
+I wanted to introduce ourselves — I'm part of the team at Northwest Junk Pros, and we provide ${svcL} and property cleanup services throughout the Seattle area.
+
+${s}
+
+We're a local, family-run business and we genuinely care about the neighborhoods we serve. We try to donate or recycle everything we can before it goes to the dump.
+
+Services we offer in this area:
+→ ${svc}
+→ Full property cleanouts
+→ Yard & debris cleanup
+→ And much more
+
+If you ever need us, we're just a call or text away:
+📞 ${ph}
+🌐 ${web}
+
+Happy to answer any questions! Have a wonderful week, everyone. 🌿`
+      ],
+      premium:[
+`Neighbors — introducing Northwest Junk Pros.
+
+We're a professional ${svcL} company serving the greater Seattle area, and we thought you might like to know about a reliable, local option when the need arises.
+
+${s}
+
+What we bring to every job in your neighborhood:
+✔ Licensed, insured, and fully vetted crew
+✔ Respectful of your property and your neighbors'
+✔ Eco-conscious disposal practices
+✔ Precise scheduling — we show up when we say we will
+✔ Transparent, written estimates before any work begins
+
+We've served many homeowners right here in the area and would be honored to help you as well.
+
+Free estimates, no pressure: ${ph}
+
+${web}`
+      ]
+    },
+    angi:{
+      urgent:[
+`Northwest Junk Pros — ${svc} | Seattle, WA | IMMEDIATE AVAILABILITY
+
+${s}
+
+URGENT AVAILABILITY: Northwest Junk Pros has same-day and next-day ${svcL} slots open this week across the greater Seattle area.
+
+SERVICE DETAILS:
+${svc} — residential and commercial
+• Free on-site estimates with no obligation
+• Same-day scheduling for urgent requests
+• Fully licensed, bonded & insured
+• Eco-friendly disposal (donation & recycling priority)
+• Transparent pricing — no hidden fees
+
+ABOUT US:
+Northwest Junk Pros is Seattle's trusted ${svcL} company. We bring professionalism, reliability, and community values to every job. Our crew is uniformed, background-checked, and trained to handle your property with care.
+
+SERVICE AREA:
+King County, Snohomish County — Seattle, Bellevue, Redmond, Kirkland, Bothell, Renton, Kent, Federal Way, and surrounding cities.
+
+CONTACT: ${ph} | ${web}
+
+Keywords: ${svc}, junk removal Seattle, property cleanup Seattle, same day ${svcL}`
+      ],
+      friendly:[
+`Northwest Junk Pros | Professional ${svc} | Seattle Area
+
+${s}
+
+Northwest Junk Pros is a locally owned and operated ${svcL} company serving the greater Seattle area. We combine professional-grade service with the personal touch of a neighborhood business.
+
+WHY HOMEOWNERS CHOOSE US:
+✓ Same-day and next-day availability
+✓ Free, no-obligation on-site estimates
+✓ Fully licensed and insured
+✓ Eco-friendly disposal practices
+✓ Friendly, professional crew
+✓ Upfront pricing with no surprises
+
+OUR PROMISE:
+We treat every home like it's our own. We arrive on time, work efficiently, and leave your space cleaner than we found it.
+
+SERVICE AREA: Greater Seattle including King & Snohomish counties.
+
+CONTACT: ${ph} | ${web}`
+      ],
+      premium:[
+`Northwest Junk Pros | Premier ${svc} Services | Seattle, WA
+
+${s}
+
+Northwest Junk Pros delivers premium ${svcL} solutions to discerning homeowners and businesses throughout the greater Seattle metro area.
+
+SERVICE STANDARDS:
+◆ Uniformed, experienced crew with background checks
+◆ Full liability and workers' compensation insurance
+◆ Written, itemized estimates — complete pricing transparency
+◆ Eco-responsible disposal with donation-first protocol
+◆ Flexible scheduling including evenings and weekends
+◆ Same-day service available for premium requests
+
+COVERAGE AREA:
+Seattle, Bellevue, Redmond, Kirkland, Bothell, Renton, Kent, Federal Way, Tacoma, and all surrounding communities.
+
+CREDENTIALS: Licensed | Bonded | Insured | Locally owned
+
+Schedule your complimentary estimate: ${ph} | ${web}`
+      ]
+    },
+    thumbtack:{
+      urgent:[
+`Need ${svcL} fast? Northwest Junk Pros is available NOW in the Seattle area.
+
+${s}
+
+✅ Same-day availability
+✅ Free estimate — no obligation
+✅ Licensed & insured
+✅ Eco-friendly disposal
+✅ 5-star service record
+
+We give you a firm price upfront. You say yes, we show up and handle everything. No surprises, no upsells.
+
+📞 ${ph} | ${web}
+
+Serving all of greater Seattle — we come to you.`
+      ],
+      friendly:[
+`Hey! Looking for reliable ${svcL} in the Seattle area? Northwest Junk Pros has you covered.
+
+${s}
+
+We make it simple:
+→ Free quote (call, text, or book online)
+→ We show up on time
+→ We handle all the heavy lifting
+→ We leave your space clean
+
+We're a local Seattle business and we genuinely enjoy what we do. Bonus: we donate usable items to local charities so less goes to the landfill.
+
+📞 ${ph}
+🌐 ${web}`
+      ],
+      premium:[
+`Northwest Junk Pros | Professional ${svc} | Seattle
+
+${s}
+
+Serving the greater Seattle area with top-rated ${svcL} services. Here's what you can expect from us:
+
+• Uniformed, professional crew
+• Free written estimate before work begins
+• Full insurance coverage
+• Eco-conscious disposal — we recycle and donate first
+• On-time arrival, every time
+• Fair, transparent pricing
+
+Licensed. Insured. Local. Five stars.
+
+${ph} | ${web}`
+      ]
+    },
+    google:{
+      urgent:[
+`🚨 Limited availability this week for ${svc} in Seattle!
+
+${s}
+
+Same-day slots open — call or text now to book: ${ph}
+
+✅ Free quotes ✅ Fully insured ✅ Eco-friendly ✅ 5-star service
+
+${web}`
+      ],
+      friendly:[
+`🌿 ${svc} made easy — Northwest Junk Pros
+
+${s}
+
+We're booking this week! Free quotes, flexible scheduling, and a crew that treats your home with respect.
+
+📞 ${ph} | 🌐 ${web}
+
+Serving Seattle, Bellevue, Kirkland & beyond. #SeattleLocal`
+      ],
+      premium:[
+`Northwest Junk Pros | Professional ${svc} | Greater Seattle
+
+${s}
+
+Licensed, insured, and trusted by Seattle homeowners. Free estimates. Same-day availability. Eco-friendly disposal.
+
+Schedule today: ${ph}
+${web}`
+      ]
+    }
+  };
+
+  const platTpls = tpl[plat] || tpl.facebook;
+  const toneTpls = platTpls[tone] || platTpls.urgent;
+  return pick(toneTpls);
+}
+
+// ── CLEARLINE AI ─────────────────────────────────────────────────
+function buildAI(b,svc,plat,tone){
+  const s=seasonal(),ph=b.phone,web=b.website;
+  const svcL=svc.toLowerCase();
+
+  const tpl={
+    facebook:{
+      urgent:[
+`🚨 Credit Union Leaders: Your members are on hold right now. Every second costs you loyalty.
+
+${s}
+
+ClearLine AI gives your credit union:
+⚡ AI phone agents that answer instantly — zero hold time
+⚡ 24/7 chat agents for loan inquiries, balance checks, and more
+⚡ Seamless integration with your existing core banking system
+⚡ Deployed in days, not months — no IT project required
+
+Our clients cut average hold times by over 80% in the first 30 days.
+
+Limited onboarding slots available this quarter.
+
+📞 ${ph}
+🌐 ${web}
+
+DM us or comment "DEMO" and we'll reach out this week.
+
+#CreditUnion #FinTech #AI #MemberExperience #${svc.replace(/\s+/g,'')}`
+      ],
+      friendly:[
+`Hey credit union folks! 👋
+
+${s}
+
+At ClearLine AI, we built our ${svcL} specifically for credit unions — because your members deserve a modern experience, and your staff deserves to focus on what they do best.
+
+Here's what our AI handles:
+💬 Loan inquiries & pre-qualification questions
+📱 Account balance and transaction support (24/7)
+📞 Intelligent call routing and answering
+✅ Routine member questions — answered instantly
+
+The result? Happier members. Lighter staff workloads. Better service scores.
+
+We'd love to show you a 15-minute demo. No pressure, no pitch — just a look at what's possible.
+
+📞 ${ph}
+🌐 ${web}
+
+Tag a credit union colleague who should see this! 👇`
+      ],
+      premium:[
+`ClearLine AI | Enterprise ${svc} for Credit Unions
+
+${s}
+
+ClearLine AI delivers sophisticated conversational AI designed from the ground up for the credit union member experience.
+
+Platform capabilities:
+◆ Natural language AI phone agents — handles complex inquiries
+◆ Intelligent chat agents for web and mobile deployment
+◆ ${svc} with compliance-ready response frameworks
+◆ Core banking system integration (most major platforms)
+◆ Member interaction analytics and reporting dashboard
+◆ Escalation routing to human staff for sensitive matters
+
+Typical client outcomes:
+▸ 80%+ reduction in average hold times
+▸ 40% reduction in tier-1 support staffing costs
+▸ 35-point increase in member satisfaction scores
+▸ ROI achieved within 90 days
+
+Request your personalized demo and ROI analysis.
+📞 ${ph} | 🌐 ${web}
+
+#CreditUnion #AI #FinancialTechnology #MemberFirst`
+      ]
+    },
+    craigslist:{
+      urgent:[
+`AI PHONE & CHAT AGENTS FOR CREDIT UNIONS — CLEARLINE AI
+
+>>> DEMO SLOTS OPEN THIS WEEK <<<
+
+${s}
+
+ClearLine AI provides enterprise-grade AI agents built specifically for credit unions. We reduce hold times, automate member support, and help your team focus on what matters most.
+
+SERVICES:
+- ${svc}
+- AI Phone Agent (answers calls, handles tier-1 support)
+- AI Chat Agent (web & mobile)
+- 24/7 Member Support Automation
+- Loan Inquiry & Account Support Automation
+
+RESULTS OUR CLIENTS ACHIEVE:
+>> 80%+ reduction in average hold times
+>> 24/7 member coverage without added headcount
+>> ROI within 90 days
+>> No code required — we handle everything
+
+SCHEDULE A DEMO:
+Phone: ${ph}
+Website: ${web}
+
+Contact us for a free demo and ROI analysis for your credit union.`
+      ],
+      friendly:[
+`${svc.toUpperCase()} FOR CREDIT UNIONS — CLEARLINE AI — SEATTLE
+
+${s}
+
+Hello credit union leaders,
+
+ClearLine AI is a Seattle-based company that builds AI phone and chat agents specifically designed for credit unions.
+
+We know your members expect fast, friendly support — and we know staffing for 24/7 coverage is expensive. Our AI agents bridge that gap.
+
+WHAT WE OFFER:
+- ${svc}
+- Natural language AI phone answering
+- Instant chat support for your website and mobile app
+- Loan inquiry automation
+- Integration with major core banking systems
+
+WHY CREDIT UNIONS LOVE US:
+- Built for member-first culture (not big bank tech)
+- No IT department required
+- Up and running in days
+- Dedicated onboarding support
+
+CONTACT:
+Phone: ${ph}
+Website: ${web}
+
+Reply or call — happy to answer any questions!`
+      ],
+      premium:[
+`${svc.toUpperCase()} — ENTERPRISE AI FOR CREDIT UNIONS — CLEARLINE AI
+
+${s}
+
+ClearLine AI delivers premium conversational AI solutions built specifically for the credit union industry.
+
+PLATFORM FEATURES:
+- Natural language AI phone agents
+- Intelligent chat agents (web & mobile)
+- ${svc}
+- Core banking system integration
+- Compliance-ready response frameworks
+- Member analytics dashboard
+- Smart escalation to human staff
+
+CLIENT OUTCOMES:
+> 80%+ reduction in average hold times
+> 40% reduction in tier-1 support costs
+> 90-day ROI typical
+> 35-point member satisfaction improvement
+
+CONTACT FOR DEMO & ROI ANALYSIS:
+${ph} | ${web}
+
+Serving credit unions nationwide from our Seattle headquarters.`
+      ]
+    },
+    nextdoor:[`Hi neighbors and community members!\n\nI'm reaching out to share what we do at ClearLine AI — we build AI phone and chat agents for credit unions.\n\n${s}\n\nIf you're a credit union member who's ever been frustrated by long hold times or unavailable support, our technology is solving exactly that problem for credit unions across the country.\n\nHappy to chat about how AI is changing member services! Feel free to DM me or check us out at ${web}.\n\n📞 ${ph}`],
+    angi:[`ClearLine AI | ${svc} for Credit Unions\n\n${s}\n\nClearLine AI provides AI-powered ${svcL} and support automation built specifically for credit unions.\n\nSERVICES:\n• ${svc}\n• AI Phone & Chat Agents\n• 24/7 Member Support\n• Loan Inquiry Automation\n\nCLIENT RESULTS:\n✓ 80%+ hold time reduction\n✓ 24/7 member availability\n✓ 90-day ROI\n✓ No code required\n\nRequest a demo: ${ph} | ${web}`],
+    thumbtack:[`ClearLine AI delivers AI phone and chat agents for credit unions — eliminating hold times and enabling 24/7 member support without adding headcount.\n\n${s}\n\n✓ ${svc}\n✓ 80%+ hold time reduction\n✓ 24/7 coverage\n✓ 90-day ROI\n✓ No IT department needed\n\n${ph} | ${web}`],
+    google:[`ClearLine AI | ${svc} for Credit Unions\n\n${s}\n\nZero hold times. 24/7 member support. 90-day ROI.\n\nRequest a free demo: ${ph}\n${web}`]
+  };
+
+  const platTpl = tpl[plat];
+  if(!platTpl) return pick(tpl.facebook[tone]||tpl.facebook.friendly);
+  if(Array.isArray(platTpl)) return pick(platTpl);
+  const toneTpl = platTpl[tone]||platTpl.friendly||platTpl.urgent||Object.values(platTpl)[0];
+  return Array.isArray(toneTpl) ? pick(toneTpl) : toneTpl;
+}
+
+// ================================================================
+// PLATFORM INFO
+// ================================================================
+function showPlatInfo(plat){
+  const card=document.getElementById('platInfoCard');
+  const info=document.getElementById('platInfo');
+  card.style.display='block';
+  const tip=PTIPS[plat]||'';
+  info.innerHTML=`<strong>${PNAME[plat]}</strong><br><br>${tip.replace(/\n/g,'<br>')}<br><br><a class="plat-link" href="${PURL[plat]}" target="_blank">→ Open ${PNAME[plat]} ↗</a>`;
+}
+
+// ================================================================
+// UI HELPERS
+// ================================================================
+function setTone(btn){
+  document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); S.tone=btn.dataset.t;
+}
+function updateCC(){
+  const v=document.getElementById('adOut').value;
+  document.getElementById('charCt').textContent=`${v.length} characters`;
+}
+document.getElementById('adOut').addEventListener('input',updateCC);
+
+function doCopy(){
+  const t=document.getElementById('adOut').value;
+  if(!t.trim()){toast('Nothing to copy yet!');return;}
+  navigator.clipboard.writeText(t).then(()=>toast('✓ Copied to clipboard!'));
+}
+function openPlat(){
+  const p=document.getElementById('platSel').value;
+  window.open(PURL[p],'_blank');
+}
+function saveHist(){
+  const t=document.getElementById('adOut').value;
+  if(!t.trim()){toast('No ad to save!');return;}
+  const b=biz(),svc=document.getElementById('svcSel').value,plat=document.getElementById('platSel').value;
+  S.history.unshift({id:Date.now(),bizId:b.id,bizName:b.name,svc,plat,tone:S.tone,date:new Date().toLocaleDateString(),text:t});
+  if(S.history.length>20) S.history=S.history.slice(0,20);
+  save(); toast('✓ Saved to history!'); renderHist();
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+const META={
+  compose:{title:'Compose Ad',sub:'Generate platform-optimized ad copy for your business'},
+  schedule:{title:'Posting Schedule',sub:'Track your ad cadence across all platforms'},
+  history:{title:'Ad History',sub:'Browse and restore previously generated ads'},
+  settings:{title:'Settings',sub:'Manage businesses, phone numbers, and services'}
+};
+function goPanel(name){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+  document.getElementById('panel-'+name).classList.add('on');
+  document.getElementById('nav-'+name).classList.add('on');
+  const m=META[name];
+  document.getElementById('pageTitle').textContent=m.title;
+  document.getElementById('pageSub').textContent=m.sub;
+  if(name==='history') renderHist();
+  if(name==='schedule') renderSched();
+  if(name==='settings') renderSettings();
+}
+
+// ================================================================
+// RENDER: BUSINESS BUTTONS
+// ================================================================
+function renderBizBtns(){
+  const c=document.getElementById('bizBtns'); c.innerHTML='';
+  S.bizs.forEach(b=>{
+    const btn=document.createElement('button');
+    btn.className='biz-btn'+(b.id===S.activeId?' on':'');
+    btn.innerHTML=`<span class="biz-dot"></span>${b.name}`;
+    btn.onclick=()=>switchBiz(b.id); c.appendChild(btn);
+  });
+}
+
+// ================================================================
+// RENDER: SERVICE SELECTS
+// ================================================================
+function renderSvcSel(sel='#svcSel'){
+  const b=biz(), el=document.querySelector(sel);
+  if(!el) return;
+  el.innerHTML=b.services.map(s=>`<option value="${s}">${s}</option>`).join('');
+}
+
+// ================================================================
+// RENDER: HISTORY
+// ================================================================
+function renderHist(){
+  const c=document.getElementById('histList');
+  if(!S.history.length){
+    c.innerHTML='<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">No saved ads yet.<br>Generate an ad and click Save to build your history.</div></div>';
+    return;
+  }
+  c.innerHTML=S.history.map(h=>`
+    <div class="hist-item" onclick="restoreHist(${h.id})">
+      <div style="flex:1">
+        <div class="hist-title">${h.bizName} — ${h.svc}</div>
+        <div style="margin-bottom:5px;display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+          <span class="pbadge ${PCLASS[h.plat]||'pf'}">${h.plat}</span>
+          <span class="pbadge" style="background:var(--BG3);color:var(--T1);border:1px solid var(--B0)">${h.tone}</span>
+        </div>
+        <div class="hist-prev">${h.text.slice(0,130)}…</div>
+      </div>
+      <div class="hist-meta">
+        <div class="hist-date">${h.date}</div>
+        <div class="hist-restore">↩ Restore</div>
+      </div>
+    </div>
+  `).join('');
+}
+function restoreHist(id){
+  const h=S.history.find(x=>x.id===id); if(!h) return;
+  if(h.bizId!==S.activeId) switchBiz(h.bizId);
+  goPanel('compose');
+  setTimeout(()=>{
+    document.getElementById('svcSel').value=h.svc;
+    document.getElementById('platSel').value=h.plat;
+    document.getElementById('adOut').value=h.text;
+    updateCC(); document.getElementById('genBadge').style.display='inline';
+    toast('✓ Ad restored from history!');
+  },80);
+}
+
+// ================================================================
+// RENDER: SCHEDULE
+// ================================================================
+function renderSched(){
+  const c=document.getElementById('schedList');
+  const items=S.schedules.filter(s=>s.bizId===S.activeId);
+  if(!items.length){
+    c.innerHTML='<div class="empty"><div class="empty-ico">📅</div><div class="empty-txt">No schedules for this business yet.<br>Click + Add to set up a posting cadence.</div></div>';
+    return;
+  }
+  const rows=items.map(s=>{
+    const now=new Date();
+    const next=s.nextDue?new Date(s.nextDue):null;
+    let sc='s-ok',sl='On Track';
+    if(!next){sc='s-soon';sl='Not Posted Yet';}
+    else{
+      const d=(next-now)/(864e5);
+      if(d<0){sc='s-over';sl='Overdue';}
+      else if(d<=2){sc='s-soon';sl='Due Soon';}
+    }
+    return `<tr>
+      <td>
+        <div style="font-weight:500;color:var(--T0)">${s.svc}</div>
+        <div style="font-size:9px;color:var(--T2);margin-top:2px">Every ${s.freq} day${s.freq!==1?'s':''}</div>
+      </td>
+      <td><span class="pbadge ${PCLASS[s.plat]||'pf'}">${s.plat}</span></td>
+      <td style="color:var(--T1);font-size:11px">${s.lastPosted?new Date(s.lastPosted).toLocaleDateString():'—'}</td>
+      <td style="color:var(--T1);font-size:11px">${next?next.toLocaleDateString():'—'}</td>
+      <td><span class="sbadge ${sc}"><span class="sdot"></span>${sl}</span></td>
+      <td>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-s" style="padding:5px 9px;font-size:10px" onclick="markPosted('${s.id}')">✓ Posted</button>
+          <button class="btn btn-d" style="padding:5px 9px;font-size:10px" onclick="delSched('${s.id}')">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  c.innerHTML=`<table class="sched-tbl">
+    <thead><tr>
+      <th>Service</th><th>Platform</th><th>Last Posted</th><th>Next Due</th><th>Status</th><th>Actions</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+function markPosted(id){
+  const s=S.schedules.find(x=>x.id===id); if(!s) return;
+  const now=new Date(); s.lastPosted=now.toISOString();
+  const next=new Date(now); next.setDate(next.getDate()+s.freq); s.nextDue=next.toISOString();
+  save(); renderSched(); toast('✓ Posted! Next due: '+next.toLocaleDateString());
+}
+function delSched(id){
+  S.schedules=S.schedules.filter(x=>x.id!==id); save(); renderSched(); toast('Schedule removed.');
+}
+
+// ================================================================
+// SCHEDULE MODAL
+// ================================================================
+function openSchedModal(){ renderSvcSel('#mSvcSel'); document.getElementById('schedModal').classList.add('open') }
+function closeModal(){ document.getElementById('schedModal').classList.remove('open') }
+document.getElementById('schedModal').addEventListener('click',function(e){ if(e.target===this) closeModal() });
+function addSched(){
+  const plat=document.getElementById('mPlatSel').value;
+  const svc=document.getElementById('mSvcSel').value;
+  const freq=parseInt(document.getElementById('mFreq').value)||7;
+  S.schedules.push({id:'s'+Date.now(),bizId:S.activeId,plat,svc,freq,lastPosted:null,nextDue:null});
+  save(); closeModal(); renderSched(); toast('✓ Schedule added!');
+}
+
+// ================================================================
+// SETTINGS
+// ================================================================
+function renderSettings(){
+  const b=biz();
+  document.getElementById('setContent').innerHTML=`
+    <div class="set-sect">
+      <div class="set-title">Business Info — ${b.name}</div>
+      <div class="form-row">
+        <div class="fg"><label>Business Name</label><input id="si-name" value="${b.name}"></div>
+        <div class="fg"><label>Phone</label><input id="si-phone" value="${b.phone}"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Tagline</label><input id="si-tag" value="${b.tagline}"></div>
+        <div class="fg"><label>Website</label><input id="si-web" value="${b.website}"></div>
+      </div>
+      <div class="fg" style="max-width:320px"><label>Location / Service Area</label><input id="si-loc" value="${b.location||''}"></div>
+      <button class="btn btn-p" onclick="saveBizInfo()" style="margin-top:4px">Save Info</button>
+    </div>
+
+    <div class="set-sect">
+      <div class="set-title">Services</div>
+      <div class="svc-tags" id="svcTags">
+        ${b.services.map(s=>`<div class="svc-tag">${s}<span class="svc-rm" onclick="rmSvc('${s}')">×</span></div>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;max-width:360px">
+        <input id="newSvc" placeholder="Add service..." style="flex:1">
+        <button class="btn btn-s" onclick="addSvc()">+ Add</button>
+      </div>
+    </div>
+
+    <div class="set-sect">
+      <div class="set-title">Data</div>
+      <div class="btn-row">
+        <button class="btn btn-s" onclick="exportData()">📦 Export Backup</button>
+        <button class="btn btn-s" onclick="document.getElementById('importFile').click()">📂 Import Backup</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
+      </div>
+    </div>
+  `;
+  const inp=document.getElementById('newSvc');
+  if(inp) inp.addEventListener('keydown',e=>{ if(e.key==='Enter') addSvc() });
+}
+function saveBizInfo(){
+  const b=biz();
+  b.name=document.getElementById('si-name').value;
+  b.phone=document.getElementById('si-phone').value;
+  b.tagline=document.getElementById('si-tag').value;
+  b.website=document.getElementById('si-web').value;
+  b.location=document.getElementById('si-loc').value;
+  save(); renderBizBtns(); toast('✓ Business info saved!');
+}
+function addSvc(){
+  const inp=document.getElementById('newSvc'), v=inp.value.trim(); if(!v) return;
+  const b=biz(); if(b.services.includes(v)){toast('Already in list!');return;}
+  b.services.push(v); save(); renderSettings(); renderSvcSel('#svcSel'); inp.value=''; toast(`✓ "${v}" added!`);
+}
+function rmSvc(svc){
+  const b=biz(); b.services=b.services.filter(s=>s!==svc);
+  save(); renderSettings(); renderSvcSel('#svcSel'); toast(`Removed "${svc}"`);
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`ad-manager-${new Date().toISOString().slice(0,10)}.json`; a.click();
+  toast('✓ Backup exported!');
+}
+function importData(inp){
+  const f=inp.files[0]; if(!f) return;
+  const r=new FileReader(); r.onload=e=>{
+    try{ Object.assign(S,JSON.parse(e.target.result)); save(); init(); toast('✓ Data imported!'); }
+    catch(err){ toast('Error: Invalid file'); }
+  }; r.readAsText(f);
+}
+
+// ================================================================
+// INIT
+// ================================================================
+function init(){
+  load();
+  document.body.className=S.bizs.find(b=>b.id===S.activeId)?.theme||'';
+  renderBizBtns(); renderSvcSel('#svcSel'); renderSvcSel('#mSvcSel');
+}
+init();
+</script>
+</body>
+</html>
