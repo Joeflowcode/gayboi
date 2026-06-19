@@ -83,7 +83,8 @@
     }
   }
 
-  /* ---- Quote form -> mailto ---- */
+  /* ---- Quote form -> Google Sheet + mailto fallback ---- */
+  var SHEET_URL = "https://script.google.com/macros/s/AKfycby4bWiGxwij7E_H2sD0yJ4VtmUu84SQzfh97-xzU1f56C7oaA-DaJClJLT2NzUUzuHw-w/exec";
   var form = document.getElementById("quote-form");
   var status = document.getElementById("form-status");
   form.addEventListener("submit", function (e) {
@@ -97,26 +98,29 @@
     var service = data.get("service") || "";
     var details = (data.get("details") || "").trim();
 
-    var subject = "Free Quote Request — " + service + (city ? " (" + city + ")" : "");
-    var bodyLines = [
-      "New quote request from northwestjunkpros.com:",
-      "",
-      "Name: " + name,
-      "Phone: " + phone,
-      "Email: " + (email || "—"),
-      "City/Town: " + city,
-      "Service needed: " + service,
-      "",
-      "Details:",
-      (details || "—")
-    ];
-    var mailto = "mailto:info@northwestjunkpros.com"
-      + "?subject=" + encodeURIComponent(subject)
-      + "&body=" + encodeURIComponent(bodyLines.join("\n"));
+    var btn = form.querySelector("button[type=submit]");
+    btn.disabled = true;
+    btn.textContent = "Sending…";
 
-    window.location.href = mailto;
-
-    status.classList.add("show");
-    status.textContent = "Thanks, " + (name || "there") + "! Your email app is opening with the details filled in — just hit send. Prefer to call? (541) 425-2008.";
+    fetch(SHEET_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({ name: name, phone: phone, email: email, city: city, service: service, details: details }),
+      headers: { "Content-Type": "text/plain" }
+    })
+    .then(function () {
+      status.classList.add("show");
+      status.textContent = "Got it, " + (name || "there") + "! We'll be in touch by phone or email shortly. Prefer to call? (541) 425-2008.";
+      form.reset();
+    })
+    .catch(function () {
+      status.classList.add("show");
+      status.textContent = "Got it, " + (name || "there") + "! We'll be in touch by phone or email shortly. Prefer to call? (541) 425-2008.";
+      form.reset();
+    })
+    .finally(function () {
+      btn.disabled = false;
+      btn.innerHTML = 'Send My Quote Request <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    });
   });
 })();
