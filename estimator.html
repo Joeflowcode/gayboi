@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Junk Removal Cost Estimator | Northwest Junk Pros</title>
+  <meta name="description" content="Get an instant junk removal price estimate in seconds. Select your items, see your range, and book same-day service in Central Oregon." />
+  <link rel="canonical" href="https://northwestjunkpros.com/estimator" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230A0F0D'/%3E%3Cpath d='M8 20.5l4-9 4 6 3-4.5 5 7.5z' fill='none' stroke='%2334D399' stroke-width='2.2' stroke-linejoin='round' stroke-linecap='round'/%3E%3Ccircle cx='22' cy='10' r='2.4' fill='%23FBBF24'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink:         #0A0F0D;
+      --ink-2:       #0E1513;
+      --ink-3:       #131D1A;
+      --green:       #16A34A;
+      --green-bright:#34D399;
+      --green-cta:   #22C55E;
+      --green-deep:  #0C6B33;
+      --gold:        #FBBF24;
+      --gold-deep:   #F59E0B;
+      --text:        #F3F8F5;
+      --muted:       #9FB2AB;
+      --border-d:    rgba(255,255,255,.09);
+      --border-d-2:  rgba(255,255,255,.15);
+      --radius:      18px;
+      --radius-sm:   12px;
+      --ease:        cubic-bezier(.22,.61,.36,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Source Sans 3", system-ui, sans-serif;
+      background: var(--ink);
+      color: var(--text);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    h1,h2,h3,h4 {
+      font-family: "Outfit", system-ui, sans-serif;
+      line-height: 1.1;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      border-bottom: 1px solid var(--border-d);
+      position: sticky;
+      top: 0;
+      background: rgba(10,15,13,.92);
+      backdrop-filter: blur(14px);
+      z-index: 50;
+    }
+
+    .logo {
+      font-family: "Outfit", sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo svg { flex-shrink: 0; }
+
+    .nav-cta {
+      background: var(--green-cta);
+      color: #000;
+      font-family: "Outfit", sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background .2s var(--ease), transform .15s;
+    }
+    .nav-cta:hover { background: var(--green-bright); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 64px 24px 40px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(52,211,153,.1);
+      border: 1px solid rgba(52,211,153,.25);
+      color: var(--green-bright);
+      font-family: "Outfit", sans-serif;
+      font-weight: 600;
+      font-size: .82rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 99px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .hero h1 span { color: var(--green-bright); }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* ── LAYOUT ── */
+    .estimator-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 700px) {
+      .estimator-wrap { grid-template-columns: 1fr; }
+      .sidebar { order: -1; }
+    }
+
+    /* ── ITEM PICKER ── */
+    .panel {
+      background: var(--ink-3);
+      border: 1px solid var(--border-d);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .panel-title {
+      font-family: "Outfit", sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-label {
+      font-family: "Outfit", sans-serif;
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--green-bright);
+      margin: 22px 0 12px;
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .item-card {
+      position: relative;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border-d);
+      background: var(--ink-2);
+      padding: 14px 12px 12px;
+      transition: border-color .18s, background .18s, transform .15s var(--ease);
+      user-select: none;
+      text-align: center;
+    }
+
+    .item-card:hover {
+      border-color: rgba(52,211,153,.35);
+      background: rgba(22,163,74,.07);
+      transform: translateY(-2px);
+    }
+
+    .item-card.active {
+      border-color: var(--green-bright);
+      background: rgba(22,163,74,.13);
+    }
+
+    .item-card.active .item-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .item-check {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 18px;
+      height: 18px;
+      background: var(--green-cta);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(.6);
+      transition: opacity .2s, transform .2s var(--ease);
+    }
+
+    .item-check svg { width: 10px; height: 10px; }
+
+    .item-emoji { font-size: 1.6rem; margin-bottom: 6px; display: block; }
+
+    .item-name {
+      font-family: "Outfit", sans-serif;
+      font-weight: 600;
+      font-size: .82rem;
+      color: var(--text);
+      line-height: 1.25;
+    }
+
+    .item-size {
+      font-size: .72rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* qty stepper */
+    .item-qty {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .item-card.active .item-qty { display: flex; }
+
+    .qty-btn {
+      width: 24px;
+      height: 24px;
+      background: rgba(52,211,153,.15);
+      border: 1px solid rgba(52,211,153,.3);
+      border-radius: 6px;
+      color: var(--green-bright);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background .15s;
+    }
+    .qty-btn:hover { background: rgba(52,211,153,.28); }
+
+    .qty-num {
+      font-family: "Outfit", sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--green-bright);
+      min-width: 18px;
+      text-align: center;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar { position: sticky; top: 82px; }
+
+    .estimate-panel {
+      background: var(--ink-3);
+      border: 1px solid var(--border-d);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .load-visual {
+      background: var(--ink-2);
+      border: 1px solid var(--border-d);
+      border-radius: var(--radius-sm);
+      padding: 18px;
+      margin-bottom: 22px;
+      text-align: center;
+    }
+
+    .truck-bar-wrap {
+      position: relative;
+      height: 38px;
+      background: rgba(255,255,255,.05);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .truck-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green-deep), var(--green-cta));
+      border-radius: 8px;
+      transition: width .45s var(--ease);
+      width: 0%;
+    }
+
+    .truck-bar.warn { background: linear-gradient(90deg, #b45309, var(--gold)); }
+    .truck-bar.full { background: linear-gradient(90deg, #991b1b, #ef4444); }
+
+    .load-label {
+      font-family: "Outfit", sans-serif;
+      font-weight: 700;
+      font-size: .85rem;
+      color: var(--muted);
+    }
+
+    .load-pct {
+      font-weight: 800;
+      color: var(--green-bright);
+    }
+
+    .price-display {
+      text-align: center;
+      padding: 20px 0;
+      border-top: 1px solid var(--border-d);
+      border-bottom: 1px solid var(--border-d);
+      margin-bottom: 18px;
+    }
+
+    .price-label {
+      font-size: .8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .price-range {
+      font-family: "Outfit", sans-serif;
+      font-weight: 900;
+      font-size: 2.2rem;
+      color: var(--green-bright);
+      line-height: 1;
+    }
+
+    .price-range.empty { color: var(--muted); font-size: 1.4rem; }
+
+    .price-note {
+      font-size: .78rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .selected-list {
+      margin-bottom: 18px;
+      min-height: 40px;
+    }
+
+    .selected-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: .85rem;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border-d);
+      color: var(--text);
+    }
+
+    .selected-item:last-child { border-bottom: none; }
+
+    .selected-item-name { display: flex; align-items: center; gap: 6px; }
+
+    .selected-item-price { color: var(--green-bright); font-weight: 700; font-family: "Outfit", sans-serif; }
+
+    .empty-msg {
+      color: var(--muted);
+      font-size: .88rem;
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .btn-book {
+      display: block;
+      width: 100%;
+      background: var(--green-cta);
+      color: #000;
+      font-family: "Outfit", sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background .2s, transform .15s var(--ease);
+      margin-bottom: 10px;
+    }
+    .btn-book:hover { background: var(--green-bright); transform: translateY(-2px); }
+    .btn-book:disabled { background: rgba(52,211,153,.2); color: var(--muted); cursor: not-allowed; transform: none; }
+
+    .btn-call {
+      display: block;
+      width: 100%;
+      background: transparent;
+      border: 1.5px solid var(--border-d-2);
+      color: var(--text);
+      font-family: "Outfit", sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      padding: 13px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-call:hover { border-color: var(--green-bright); background: rgba(52,211,153,.06); }
+
+    .disclaimer {
+      font-size: .72rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border-d);
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    footer a { color: var(--green-bright); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="logo">
+      <svg width="28" height="28" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="7" fill="#0A0F0D"/>
+        <path d="M8 20.5l4-9 4 6 3-4.5 5 7.5z" fill="none" stroke="#34D399" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="22" cy="10" r="2.4" fill="#FBBF24"/>
+      </svg>
+      NW Junk Pros
+    </a>
+    <a href="tel:5414252008" class="nav-cta">📞 (541) 425-2008</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#34D399" stroke-width="1.5"/><path d="M4 6l1.5 1.5L8 4" stroke="#34D399" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Free Instant Estimate
+    </div>
+    <h1>How Much Will Your <span>Junk Removal</span> Cost?</h1>
+    <p>Pick your items below and get a real price range in seconds — no email required.</p>
+  </div>
+
+  <!-- MAIN -->
+  <div class="estimator-wrap">
+
+    <!-- LEFT: Item Picker -->
+    <div class="panel" id="picker">
+
+      <div class="panel-title">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="3" stroke="#34D399" stroke-width="1.8"/><path d="M7 10h6M10 7v6" stroke="#34D399" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Select Items to Remove
+      </div>
+
+      <!-- Furniture -->
+      <div class="category-label">🛋 Furniture</div>
+      <div class="items-grid" id="grid-furniture"></div>
+
+      <!-- Appliances -->
+      <div class="category-label">🔌 Appliances</div>
+      <div class="items-grid" id="grid-appliances"></div>
+
+      <!-- Outdoor / Yard -->
+      <div class="category-label">🌿 Outdoor & Yard</div>
+      <div class="items-grid" id="grid-outdoor"></div>
+
+      <!-- Misc -->
+      <div class="category-label">📦 Boxes & Misc</div>
+      <div class="items-grid" id="grid-misc"></div>
+
+    </div>
+
+    <!-- RIGHT: Sidebar estimate -->
+    <div class="sidebar">
+      <div class="estimate-panel">
+
+        <div class="panel-title">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 17l4-4 4 2 6-9" stroke="#FBBF24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Your Estimate
+        </div>
+
+        <!-- Truck fill visual -->
+        <div class="load-visual">
+          <div class="truck-bar-wrap">
+            <div class="truck-bar" id="truckBar"></div>
+          </div>
+          <div class="load-label">Truck fill: <span class="load-pct" id="loadPct">0%</span></div>
+        </div>
+
+        <!-- Price -->
+        <div class="price-display">
+          <div class="price-label">Estimated Range</div>
+          <div class="price-range empty" id="priceRange">Select items →</div>
+          <div class="price-note" id="priceNote"></div>
+        </div>
+
+        <!-- Selected items -->
+        <div class="selected-list" id="selectedList">
+          <div class="empty-msg">No items selected yet.</div>
+        </div>
+
+        <a href="https://form.jotform.com/251459592682164" target="_blank" class="btn-book" id="bookBtn">
+          Book My Pickup — Get Exact Quote
+        </a>
+        <a href="tel:5414252008" class="btn-call">📞 Call (541) 425-2008</a>
+
+        <p class="disclaimer">Final price confirmed on-site. Estimate based on typical load sizes. Eco-friendly disposal included.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2025 Northwest Junk Pros · Bend, OR · <a href="/">northwestjunkpros.com</a></p>
+  </footer>
+
+  <script>
+    // ── ITEM DATA ──
+    // Each item: { id, emoji, name, size (label), units (load units out of 100), priceMin, priceMax }
+    const ITEMS = {
+      furniture: [
+        { id:"couch",     emoji:"🛋", name:"Couch/Sofa",     size:"Large",   units:22, pMin:120, pMax:180 },
+        { id:"loveseat",  emoji:"🪑", name:"Loveseat",       size:"Medium",  units:15, pMin:90,  pMax:140 },
+        { id:"chair",     emoji:"💺", name:"Armchair",       size:"Medium",  units:10, pMin:70,  pMax:110 },
+        { id:"bed-full",  emoji:"🛏", name:"Bed Frame (Full/Q)", size:"Large", units:20, pMin:110, pMax:165 },
+        { id:"bed-king",  emoji:"🛏", name:"Bed Frame (King)", size:"XL",    units:28, pMin:140, pMax:200 },
+        { id:"mattress",  emoji:"😴", name:"Mattress",       size:"Large",   units:25, pMin:100, pMax:160 },
+        { id:"dresser",   emoji:"🗄", name:"Dresser",        size:"Medium",  units:14, pMin:85,  pMax:130 },
+        { id:"table",     emoji:"🍽", name:"Dining Table",   size:"Large",   units:18, pMin:95,  pMax:145 },
+        { id:"desk",      emoji:"🖥", name:"Desk",           size:"Medium",  units:14, pMin:80,  pMax:125 },
+        { id:"bookshelf", emoji:"📚", name:"Bookshelf",      size:"Medium",  units:12, pMin:70,  pMax:110 },
+      ],
+      appliances: [
+        { id:"fridge",    emoji:"🧊", name:"Refrigerator",   size:"Large",   units:20, pMin:130, pMax:190 },
+        { id:"washer",    emoji:"🫧", name:"Washer",         size:"Large",   units:16, pMin:110, pMax:160 },
+        { id:"dryer",     emoji:"💨", name:"Dryer",          size:"Large",   units:16, pMin:110, pMax:160 },
+        { id:"dishwasher",emoji:"🍽", name:"Dishwasher",     size:"Medium",  units:12, pMin:90,  pMax:135 },
+        { id:"stove",     emoji:"🔥", name:"Stove/Range",    size:"Large",   units:16, pMin:100, pMax:155 },
+        { id:"microwave", emoji:"📡", name:"Microwave",      size:"Small",   units:4,  pMin:50,  pMax:75  },
+        { id:"tv-large",  emoji:"📺", name:"TV (50\"+)",     size:"Large",   units:8,  pMin:75,  pMax:115 },
+        { id:"tv-small",  emoji:"📺", name:"TV (under 50\")",size:"Small",   units:4,  pMin:50,  pMax:80  },
+        { id:"ac-unit",   emoji:"❄", name:"AC Unit",        size:"Medium",  units:10, pMin:90,  pMax:140 },
+        { id:"waterheat", emoji:"🚿", name:"Water Heater",   size:"Large",   units:14, pMin:110, pMax:160 },
+      ],
+      outdoor: [
+        { id:"trampoline",emoji:"🤸", name:"Trampoline",     size:"XL",      units:30, pMin:160, pMax:230 },
+        { id:"lawnmower", emoji:"🌿", name:"Lawn Mower",     size:"Medium",  units:10, pMin:80,  pMax:125 },
+        { id:"hot-tub",   emoji:"♨", name:"Hot Tub",        size:"XL",      units:45, pMin:300, pMax:450 },
+        { id:"shed",      emoji:"🏚", name:"Small Shed",     size:"XL",      units:40, pMin:250, pMax:380 },
+        { id:"grill",     emoji:"🔥", name:"Grill/BBQ",      size:"Medium",  units:8,  pMin:65,  pMax:100 },
+        { id:"playset",   emoji:"🛝", name:"Play Set",       size:"XL",      units:35, pMin:200, pMax:320 },
+        { id:"yard-bags", emoji:"🌱", name:"Yard Debris (bags)", size:"Small", units:5, pMin:45, pMax:75 },
+        { id:"fencing",   emoji:"🪵", name:"Fencing/Wood",   size:"Medium",  units:12, pMin:80,  pMax:130 },
+      ],
+      misc: [
+        { id:"boxes",     emoji:"📦", name:"Box of Stuff",   size:"Small",   units:2,  pMin:0,   pMax:0   },
+        { id:"bags",      emoji:"🛍", name:"Trash Bag",      size:"Small",   units:1,  pMin:0,   pMax:0   },
+        { id:"tires",     emoji:"🔄", name:"Tires (each)",   size:"Small",   units:3,  pMin:30,  pMax:50  },
+        { id:"mattress-b",emoji:"🪣", name:"Box Spring",     size:"Large",   units:14, pMin:90,  pMax:140 },
+        { id:"carpet",    emoji:"🟫", name:"Carpet Roll",    size:"Medium",  units:8,  pMin:60,  pMax:95  },
+        { id:"e-waste",   emoji:"💾", name:"Electronics Bag",size:"Small",   units:3,  pMin:40,  pMax:70  },
+        { id:"bike",      emoji:"🚲", name:"Bicycle",        size:"Medium",  units:6,  pMin:55,  pMax:90  },
+        { id:"misc-pile", emoji:"🗑", name:"Misc. Pile",     size:"Medium",  units:8,  pMin:60,  pMax:100 },
+      ]
+    };
+
+    // Minimum trip charge
+    const TRIP_MIN = 100;
+    const TRUCK_CAPACITY = 100; // units
+
+    // State
+    const selected = {}; // id -> qty
+
+    // ── BUILD GRIDS ──
+    function buildGrid(category, containerId) {
+      const container = document.getElementById(containerId);
+      ITEMS[category].forEach(item => {
+        const card = document.createElement("div");
+        card.className = "item-card";
+        card.dataset.id = item.id;
+        card.innerHTML = `
+          <div class="item-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="item-emoji">${item.emoji}</span>
+          <div class="item-name">${item.name}</div>
+          <div class="item-size">${item.size}</div>
+          <div class="item-qty">
+            <button class="qty-btn minus" data-id="${item.id}">−</button>
+            <span class="qty-num" id="qty-${item.id}">1</span>
+            <button class="qty-btn plus" data-id="${item.id}">+</button>
+          </div>
+        `;
+        container.appendChild(card);
+
+        // Toggle select on card click (not on qty buttons)
+        card.addEventListener("click", e => {
+          if (e.target.closest(".qty-btn")) return;
+          toggleItem(item.id);
+        });
+      });
+    }
+
+    Object.keys(ITEMS).forEach(cat => buildGrid(cat, `grid-${cat}`));
+
+    // Qty button delegation
+    document.getElementById("picker").addEventListener("click", e => {
+      const btn = e.target.closest(".qty-btn");
+      if (!btn) return;
+      const id = btn.dataset.id;
+      if (!selected[id]) return;
+      if (btn.classList.contains("plus")) {
+        selected[id] = Math.min(selected[id] + 1, 9);
+      } else {
+        selected[id] = Math.max(selected[id] - 1, 1);
+      }
+      document.getElementById(`qty-${id}`).textContent = selected[id];
+      updateEstimate();
+    });
+
+    function toggleItem(id) {
+      const card = document.querySelector(`.item-card[data-id="${id}"]`);
+      if (selected[id]) {
+        delete selected[id];
+        card.classList.remove("active");
+        document.getElementById(`qty-${id}`).textContent = "1";
+      } else {
+        selected[id] = 1;
+        card.classList.add("active");
+      }
+      updateEstimate();
+    }
+
+    function getItem(id) {
+      for (const cat of Object.values(ITEMS)) {
+        const found = cat.find(i => i.id === id);
+        if (found) return found;
+      }
+    }
+
+    function updateEstimate() {
+      const ids = Object.keys(selected);
+
+      if (ids.length === 0) {
+        document.getElementById("priceRange").textContent = "Select items →";
+        document.getElementById("priceRange").classList.add("empty");
+        document.getElementById("priceNote").textContent = "";
+        document.getElementById("selectedList").innerHTML = '<div class="empty-msg">No items selected yet.</div>';
+        setBar(0);
+        return;
+      }
+
+      let totalUnits = 0;
+      let totalPMin = 0;
+      let totalPMax = 0;
+
+      const listHTML = ids.map(id => {
+        const item = getItem(id);
+        const qty = selected[id];
+        totalUnits += item.units * qty;
+        totalPMin  += item.pMin * qty;
+        totalPMax  += item.pMax * qty;
+        const perItem = item.pMin === 0 ? "(included)" : `$${item.pMin * qty}–$${item.pMax * qty}`;
+        return `<div class="selected-item">
+          <span class="selected-item-name">${item.emoji} ${qty > 1 ? qty + "× " : ""}${item.name}</span>
+          <span class="selected-item-price">${perItem}</span>
+        </div>`;
+      }).join("");
+
+      document.getElementById("selectedList").innerHTML = listHTML;
+
+      // Apply trip minimum
+      if (totalPMin < TRIP_MIN) totalPMin = TRIP_MIN;
+      if (totalPMax < TRIP_MIN + 50) totalPMax = TRIP_MIN + 50;
+
+      // Over a full truck?
+      const trucks = Math.ceil(totalUnits / TRUCK_CAPACITY);
+      let note = "Upfront pricing — no surprise fees.";
+      if (trucks > 1) {
+        totalPMin *= trucks;
+        totalPMax *= trucks;
+        note = `⚠️ Estimated ${trucks} truck loads. Call for an exact multi-load quote.`;
+      }
+
+      document.getElementById("priceRange").textContent = `$${totalPMin}–$${totalPMax}`;
+      document.getElementById("priceRange").classList.remove("empty");
+      document.getElementById("priceNote").textContent = note;
+
+      const pct = Math.min(Math.round((totalUnits / TRUCK_CAPACITY) * 100), 100);
+      setBar(pct, trucks > 1);
+    }
+
+    function setBar(pct, overflow = false) {
+      const bar = document.getElementById("truckBar");
+      const label = document.getElementById("loadPct");
+      bar.style.width = pct + "%";
+      bar.className = "truck-bar" + (pct >= 100 ? " full" : pct >= 70 ? " warn" : "");
+      label.textContent = pct + "%";
+      label.style.color = overflow ? "#ef4444" : pct >= 70 ? "#FBBF24" : "#34D399";
+    }
+  </script>
+</body>
+</html>

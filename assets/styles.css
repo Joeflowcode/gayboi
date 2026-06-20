@@ -135,6 +135,12 @@ header.site.scrolled {
   transition: color .2s ease, background-color .2s ease;
 }
 .nav-links a.link:hover { color: var(--text); background: rgba(255,255,255,.05); }
+.nav-links a.link--estimator {
+  color: var(--green-bright);
+  border: 1.5px solid rgba(52,211,153,.3);
+  background: rgba(52,211,153,.07);
+}
+.nav-links a.link--estimator:hover { background: rgba(52,211,153,.16); border-color: rgba(52,211,153,.6); }
 .nav-cta { display: flex; align-items: center; gap: .7rem; }
 .nav-phone {
   display: inline-flex; align-items: center; gap: .5rem;
