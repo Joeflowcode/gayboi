@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-forest-50: #f2f8f3;
+  --color-forest-100: #e0efe3;
+  --color-forest-600: #2f6b3c;
+  --color-forest-700: #265731;
+  --color-forest-800: #1e4527;
+  --color-forest-900: #16331d;
+  --color-amber-brand: #e8a020;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-gray-800 antialiased;
+}
