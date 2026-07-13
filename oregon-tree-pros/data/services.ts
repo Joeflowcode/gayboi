@@ -16,7 +16,7 @@ export const services: Service[] = [
     slug: "tree-removal",
     name: "Tree Removal",
     shortName: "Removal",
-    metaTitle: "Tree Removal in Oregon | Free Estimates | Oregon Tree Pros",
+    metaTitle: "Tree Removal in Oregon | Free Estimates | TreeRemovalOregon.com",
     metaDescription:
       "Safe, insured tree removal across Portland, Salem, Eugene & Bend. Certified arborists, crane-assisted removals, permits handled, clean-up included. Free estimates.",
     h1: "Professional Tree Removal in Oregon",
@@ -160,7 +160,7 @@ export const services: Service[] = [
     slug: "land-clearing",
     name: "Land & Lot Clearing",
     shortName: "Clearing",
-    metaTitle: "Land Clearing & Defensible Space in Oregon | Oregon Tree Pros",
+    metaTitle: "Land Clearing & Defensible Space in Oregon | TreeRemovalOregon.com",
     metaDescription:
       "Lot clearing, brush removal, and wildfire defensible space services across Oregon. Build-ready site prep and Firewise clearing. Free on-site estimates.",
     h1: "Land Clearing & Wildfire Defensible Space",

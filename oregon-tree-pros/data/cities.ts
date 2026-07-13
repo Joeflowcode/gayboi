@@ -16,7 +16,7 @@ export const cities: City[] = [
     name: "Portland",
     county: "Multnomah County",
     region: "Portland Metro",
-    metaTitle: "Tree Removal Portland OR | Permits Handled | Oregon Tree Pros",
+    metaTitle: "Tree Removal Portland OR | Permits Handled | TreeRemovalOregon.com",
     metaDescription:
       "Tree removal, trimming & stump grinding in Portland, OR. We handle Portland Title 11 tree permits, work around tight city lots, and respond 24/7 to storm damage.",
     intro:
@@ -42,7 +42,7 @@ export const cities: City[] = [
     name: "Beaverton",
     county: "Washington County",
     region: "Portland Metro",
-    metaTitle: "Tree Removal Beaverton OR | Free Estimates | Oregon Tree Pros",
+    metaTitle: "Tree Removal Beaverton OR | Free Estimates | TreeRemovalOregon.com",
     metaDescription:
       "Tree removal, pruning & stump grinding in Beaverton, OR. Licensed, insured crews serving Washington County neighborhoods. Free same-week estimates.",
     intro:
@@ -64,7 +64,7 @@ export const cities: City[] = [
     name: "Gresham",
     county: "Multnomah County",
     region: "Portland Metro",
-    metaTitle: "Tree Removal Gresham OR | Storm Damage Experts | Oregon Tree Pros",
+    metaTitle: "Tree Removal Gresham OR | Storm Damage Experts | TreeRemovalOregon.com",
     metaDescription:
       "Tree removal, emergency storm response & stump grinding in Gresham, OR. East county ice storm specialists. Licensed, insured, free estimates.",
     intro:
@@ -86,7 +86,7 @@ export const cities: City[] = [
     name: "Hillsboro",
     county: "Washington County",
     region: "Portland Metro",
-    metaTitle: "Tree Removal Hillsboro OR | Licensed & Insured | Oregon Tree Pros",
+    metaTitle: "Tree Removal Hillsboro OR | Licensed & Insured | TreeRemovalOregon.com",
     metaDescription:
       "Professional tree removal, trimming & lot clearing in Hillsboro, OR. Serving Orenco, Tanasbourne & rural Washington County. Free estimates.",
     intro:
@@ -108,7 +108,7 @@ export const cities: City[] = [
     name: "Lake Oswego",
     county: "Clackamas County",
     region: "Portland Metro",
-    metaTitle: "Tree Removal Lake Oswego OR | Permit Experts | Oregon Tree Pros",
+    metaTitle: "Tree Removal Lake Oswego OR | Permit Experts | TreeRemovalOregon.com",
     metaDescription:
       "Tree removal & pruning in Lake Oswego, OR. We navigate LO's strict tree code, write arborist reports, and protect high-value landscapes. Free estimates.",
     intro:
@@ -130,7 +130,7 @@ export const cities: City[] = [
     name: "Salem",
     county: "Marion County",
     region: "Salem / Mid-Valley",
-    metaTitle: "Tree Removal Salem OR | Fast Free Estimates | Oregon Tree Pros",
+    metaTitle: "Tree Removal Salem OR | Fast Free Estimates | TreeRemovalOregon.com",
     metaDescription:
       "Tree removal, trimming & stump grinding in Salem and Keizer, OR. Licensed CCB crews, 24/7 storm response, free estimates within 48 hours.",
     intro:
@@ -152,7 +152,7 @@ export const cities: City[] = [
     name: "Albany & Corvallis",
     county: "Linn & Benton Counties",
     region: "Salem / Mid-Valley",
-    metaTitle: "Tree Removal Albany & Corvallis OR | Oregon Tree Pros",
+    metaTitle: "Tree Removal Albany & Corvallis OR | TreeRemovalOregon.com",
     metaDescription:
       "Tree removal, pruning & land clearing in Albany, Corvallis & Lebanon, OR. Licensed, insured mid-valley crews. Free on-site estimates.",
     intro:
@@ -174,7 +174,7 @@ export const cities: City[] = [
     name: "Eugene",
     county: "Lane County",
     region: "Eugene / Springfield",
-    metaTitle: "Tree Removal Eugene OR | Certified Arborists | Oregon Tree Pros",
+    metaTitle: "Tree Removal Eugene OR | Certified Arborists | TreeRemovalOregon.com",
     metaDescription:
       "Tree removal, trimming & stump grinding in Eugene & Springfield, OR. Certified arborists, city permit handling, 24/7 emergency response. Free estimates.",
     intro:
@@ -200,7 +200,7 @@ export const cities: City[] = [
     name: "Bend",
     county: "Deschutes County",
     region: "Central Oregon",
-    metaTitle: "Tree Removal Bend OR | Defensible Space Experts | Oregon Tree Pros",
+    metaTitle: "Tree Removal Bend OR | Defensible Space Experts | TreeRemovalOregon.com",
     metaDescription:
       "Tree removal, ponderosa thinning & wildfire defensible space in Bend, OR. Insurance-accepted fuel reduction, juniper removal, free estimates.",
     intro:

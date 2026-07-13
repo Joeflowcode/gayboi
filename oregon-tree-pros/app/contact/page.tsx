@@ -4,7 +4,7 @@ import LeadForm from "@/components/LeadForm";
 import { TrustBadges } from "@/components/Sections";
 
 export const metadata: Metadata = {
-  title: "Free Tree Service Estimate | Contact Oregon Tree Pros",
+  title: "Free Tree Service Estimate | Contact Us",
   description:
     "Request a free tree removal or trimming estimate anywhere in our Oregon service area. Call, text, or send the form — we respond within one business hour.",
 };

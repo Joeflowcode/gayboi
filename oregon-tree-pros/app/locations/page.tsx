@@ -6,7 +6,7 @@ import Cta from "@/components/Cta";
 export const metadata: Metadata = {
   title: "Service Areas | Tree Removal Across Oregon",
   description:
-    "Oregon Tree Pros serves the Portland metro, Salem, Albany, Corvallis, Eugene, Springfield, Bend, and Central Oregon with full tree services.",
+    "Tree Removal Oregon serves the Portland metro, Salem, Albany, Corvallis, Eugene, Springfield, Bend, and Central Oregon with full tree services.",
 };
 
 export default function LocationsIndex() {

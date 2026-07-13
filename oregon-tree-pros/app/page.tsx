@@ -10,7 +10,7 @@ import LeadForm from "@/components/LeadForm";
 import { TrustBadges, Reviews, Gallery, Financing } from "@/components/Sections";
 
 export const metadata: Metadata = {
-  title: "Tree Removal Oregon | Portland, Salem, Eugene & Bend | Oregon Tree Pros",
+  title: "Tree Removal Oregon | Portland, Salem, Eugene & Bend",
   description:
     "Oregon's trusted tree removal company. Certified arborists, crane-assisted removals, 24/7 storm response, permits handled, free estimates. Serving Portland, Salem, Eugene & Bend.",
 };

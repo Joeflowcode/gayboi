@@ -4,9 +4,9 @@ import Cta from "@/components/Cta";
 import { TrustBadges, Reviews } from "@/components/Sections";
 
 export const metadata: Metadata = {
-  title: "About Oregon Tree Pros | Licensed Oregon Tree Service",
+  title: "About Us | Licensed Oregon Tree Service",
   description:
-    "Oregon Tree Pros is a licensed, bonded, insured tree service with ISA certified arborists serving Portland, Salem, Eugene & Bend since 2016.",
+    "Tree Removal Oregon is a licensed, bonded, insured tree service with ISA certified arborists serving Portland, Salem, Eugene & Bend since 2016.",
 };
 
 export default function About() {

@@ -17,7 +17,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <span className="text-2xl" aria-hidden>🌲</span>
             <span className="font-extrabold text-forest-800 text-lg leading-tight">
-              Oregon Tree Pros
+              Tree Removal Oregon
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">

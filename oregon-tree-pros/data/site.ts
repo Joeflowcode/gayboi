@@ -1,7 +1,7 @@
 // Central site config — swap these values when a contractor licenses the site.
 export const site = {
-  name: "Oregon Tree Pros",
-  legalName: "Oregon Tree Pros LLC",
+  name: "Tree Removal Oregon",
+  legalName: "Tree Removal Oregon LLC",
   tagline: "Safe, Insured Tree Removal Across Oregon",
   phone: "(503) 512-5218", // CallRail tracking number (forwards to real line); swap.js may swap per-visitor
   phoneHref: "tel:503-512-5218",
@@ -35,7 +35,7 @@ export const testimonials = [
   {
     name: "Dave R.",
     city: "Salem",
-    text: "Got three quotes for removing two big maples. Oregon Tree Pros wasn't the cheapest but they were the only ones who sent a certified arborist and explained exactly how they'd protect the fence and garden beds. Flawless work.",
+    text: "Got three quotes for removing two big maples. Tree Removal Oregon wasn't the cheapest but they were the only ones who sent a certified arborist and explained exactly how they'd protect the fence and garden beds. Flawless work.",
     service: "Tree Removal",
   },
   {

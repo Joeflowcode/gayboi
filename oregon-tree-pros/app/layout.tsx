@@ -10,8 +10,8 @@ import { site } from "@/data/site";
 export const metadata: Metadata = {
   metadataBase: new URL(site.domain),
   title: {
-    default: "Oregon Tree Pros | Tree Removal, Trimming & Stump Grinding",
-    template: "%s | Oregon Tree Pros",
+    default: "Tree Removal Oregon | Removal, Trimming & Stump Grinding",
+    template: "%s | Tree Removal Oregon",
   },
   description:
     "Licensed, insured tree removal across Portland, Salem, Eugene & Bend. Certified arborists, 24/7 storm response, free estimates.",

@@ -1,4 +1,4 @@
-# Oregon Tree Pros — SEO & Lead-Gen Strategy
+# Tree Removal Oregon (treeremovaloregon.com) — SEO & Lead-Gen Strategy
 
 Rank-and-rent asset: rank statewide + city pages for tree service keywords, capture exclusive
 leads, sell/rent to a local licensed tree company. **Replace placeholders before launch:**

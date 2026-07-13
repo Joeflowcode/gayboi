@@ -26,7 +26,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     "@type": "Article",
     headline: post.title,
     datePublished: post.date,
-    author: { "@type": "Organization", name: "Oregon Tree Pros" },
+    author: { "@type": "Organization", name: "Tree Removal Oregon" },
   };
 
   return (
