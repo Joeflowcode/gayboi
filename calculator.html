@@ -55,6 +55,31 @@
       border-bottom: 1px solid #0f3460;
       padding-bottom: 8px;
     }
+    .card.upsell {
+      border-color: #2a6b3a;
+      background: #0f2318;
+    }
+    .card.upsell h2 {
+      color: #34d399;
+      border-bottom-color: #2a6b3a;
+    }
+    .upsell-badge {
+      display: inline-block;
+      background: #34d399;
+      color: #0a1a0f;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-left: 10px;
+      vertical-align: middle;
+      letter-spacing: 0.5px;
+    }
+    .upsell-note {
+      font-size: 0.85rem;
+      color: #6ee7b7;
+      margin-bottom: 16px;
+    }
     .item-row {
       display: flex;
       align-items: center;
@@ -119,6 +144,53 @@
       accent-color: #f0a500;
       cursor: pointer;
     }
+    .upsell-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #142b1e;
+      margin-bottom: 8px;
+      gap: 12px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    .upsell-row:hover { border-color: #34d399; }
+    .upsell-row.checked { border-color: #34d399; background: #1a3d28; }
+    .upsell-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #34d399;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .upsell-label { flex: 1; font-size: 0.95rem; }
+    .upsell-pricing {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+    .upsell-original {
+      font-size: 0.8rem;
+      color: #888;
+      text-decoration: line-through;
+    }
+    .upsell-bundle {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #34d399;
+    }
+    .upsell-save {
+      font-size: 0.72rem;
+      color: #6ee7b7;
+      background: #0f2318;
+      border: 1px solid #34d399;
+      border-radius: 4px;
+      padding: 1px 5px;
+    }
     select, input[type="number"] {
       background: #0f3460;
       border: 1px solid #1a4a8a;
@@ -154,6 +226,10 @@
       margin-bottom: 8px;
       color: #ccc;
     }
+    .summary-line.savings {
+      color: #34d399;
+      font-weight: bold;
+    }
     .summary-line.total {
       font-size: 1.4rem;
       font-weight: bold;
@@ -161,6 +237,18 @@
       border-top: 1px solid #1a4a8a;
       padding-top: 12px;
       margin-top: 8px;
+    }
+    .savings-banner {
+      background: #0f2318;
+      border: 1px solid #34d399;
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-top: 12px;
+      text-align: center;
+      color: #34d399;
+      font-weight: bold;
+      font-size: 0.95rem;
+      display: none;
     }
     .btn-row {
       display: flex;
@@ -270,6 +358,73 @@
   </div>
 </div>
 
+<!-- UPSELL ADD-ONS -->
+<div class="card upsell">
+  <h2>Add-On Services <span class="upsell-badge">BUNDLE &amp; SAVE</span></h2>
+  <p class="upsell-note">Already on-site for junk removal — add these services at a discounted rate. Competitors charge full price; you get the bundle discount.</p>
+
+  <label class="upsell-row" id="row-pwDriveway">
+    <input type="checkbox" id="pwDriveway" onchange="toggleRow('pwDriveway');calc()">
+    <span class="upsell-label">Power Wash — Driveway / Walkway</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $249</span>
+      <span class="upsell-bundle">$199</span>
+      <span class="upsell-save">Save $50 (20% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-pwDeck">
+    <input type="checkbox" id="pwDeck" onchange="toggleRow('pwDeck');calc()">
+    <span class="upsell-label">Power Wash — Deck / Patio</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $199</span>
+      <span class="upsell-bundle">$159</span>
+      <span class="upsell-save">Save $40 (20% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-pwExterior">
+    <input type="checkbox" id="pwExterior" onchange="toggleRow('pwExterior');calc()">
+    <span class="upsell-label">Power Wash — House Exterior</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $329</span>
+      <span class="upsell-bundle">$269</span>
+      <span class="upsell-save">Save $60 (18% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-gutters">
+    <input type="checkbox" id="gutters" onchange="toggleRow('gutters');calc()">
+    <span class="upsell-label">Gutter Cleanout</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $219</span>
+      <span class="upsell-bundle">$169</span>
+      <span class="upsell-save">Save $50 (23% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-mossRemoval">
+    <input type="checkbox" id="mossRemoval" onchange="toggleRow('mossRemoval');calc()">
+    <span class="upsell-label">Roof Moss Removal</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $374</span>
+      <span class="upsell-bundle">$299</span>
+      <span class="upsell-save">Save $75 (20% off)</span>
+    </span>
+  </label>
+
+  <label class="upsell-row" id="row-mossTreatment">
+    <input type="checkbox" id="mossTreatment" onchange="toggleRow('mossTreatment');calc()">
+    <span class="upsell-label">Roof Moss Treatment (zinc/chemical)</span>
+    <span class="upsell-pricing">
+      <span class="upsell-original">Reg. $199</span>
+      <span class="upsell-bundle">$149</span>
+      <span class="upsell-save">Save $50 (25% off)</span>
+    </span>
+  </label>
+
+</div>
+
 <!-- DISCOUNT / CUSTOM -->
 <div class="card">
   <h2>Adjustments</h2>
@@ -298,6 +453,7 @@
     <span>TOTAL</span>
     <span id="totalDisplay">$0</span>
   </div>
+  <div class="savings-banner" id="savingsBanner"></div>
   <div class="btn-row">
     <button class="btn btn-primary" onclick="printQuote()">Print / Save Quote</button>
     <button class="btn btn-secondary" onclick="resetAll()">Reset</button>
@@ -306,22 +462,42 @@
 
 <script>
   const items = {
-    fridge:  { label: 'Refrigerator/Freezer',      price: 60 },
-    washer:  { label: 'Washer/Dryer',               price: 50 },
-    dish:    { label: 'Dishwasher/Microwave',        price: 30 },
-    ac:      { label: 'AC Unit',                     price: 40 },
-    sofa:    { label: 'Sofa/Sectional',              price: 50 },
-    mattress:{ label: 'Mattress/Box Spring',         price: 40 },
-    dresser: { label: 'Dresser/Armoire',             price: 30 },
-    hottub:  { label: 'Hot Tub/Spa',                price: 225 },
-    mower:   { label: 'Riding Mower/Tractor',        price: 85 },
-    pushmow: { label: 'Push Mower/Trimmer',          price: 25 },
-    shed:    { label: 'Shed/Play Set (disassemble)', price: 175 },
-    tramp:   { label: 'Trampoline',                  price: 75 },
-    tv:      { label: 'TV/Monitor',                  price: 25 },
-    tire:    { label: 'Tire',                        price: 20 },
-    hazmat:  { label: 'Paint/Propane Can',           price: 15 },
-    piano:   { label: 'Piano/Safe',                  price: 175 },
+    fridge:   { label: 'Refrigerator/Freezer',      price: 60 },
+    washer:   { label: 'Washer/Dryer',               price: 50 },
+    dish:     { label: 'Dishwasher/Microwave',        price: 30 },
+    ac:       { label: 'AC Unit',                     price: 40 },
+    sofa:     { label: 'Sofa/Sectional',              price: 50 },
+    mattress: { label: 'Mattress/Box Spring',         price: 40 },
+    dresser:  { label: 'Dresser/Armoire',             price: 30 },
+    hottub:   { label: 'Hot Tub/Spa',                price: 225 },
+    mower:    { label: 'Riding Mower/Tractor',        price: 85 },
+    pushmow:  { label: 'Push Mower/Trimmer',          price: 25 },
+    shed:     { label: 'Shed/Play Set (disassemble)', price: 175 },
+    tramp:    { label: 'Trampoline',                  price: 75 },
+    tv:       { label: 'TV/Monitor',                  price: 25 },
+    tire:     { label: 'Tire',                        price: 20 },
+    hazmat:   { label: 'Paint/Propane Can',           price: 15 },
+    piano:    { label: 'Piano/Safe',                  price: 175 },
+  };
+
+  const upsells = {
+    pwDriveway:   { label: 'Power Wash — Driveway/Walkway',    bundle: 199, regular: 249 },
+    pwDeck:       { label: 'Power Wash — Deck/Patio',          bundle: 159, regular: 199 },
+    pwExterior:   { label: 'Power Wash — House Exterior',      bundle: 269, regular: 329 },
+    gutters:      { label: 'Gutter Cleanout',                  bundle: 169, regular: 219 },
+    mossRemoval:  { label: 'Roof Moss Removal',                bundle: 299, regular: 374 },
+    mossTreatment:{ label: 'Roof Moss Treatment',              bundle: 149, regular: 199 },
+  };
+
+  const modifiers = {
+    stairs:      { label: 'Stairs/Upper floor',       price: 35 },
+    longCarry:   { label: 'Long carry/hard access',   price: 35 },
+    disassembly: { label: 'Disassembly',              price: 45 },
+    sameDay:     { label: 'Same-day/rush',            price: 60 },
+    heavy:       { label: 'Exceptionally heavy load', price: 60 },
+    demo:        { label: 'Light demo/drywall',       price: 100 },
+    cleaning:    { label: 'Sweep-out/cleaning',       price: 50 },
+    dumpFee:     { label: 'Dump fee',                 price: 65 },
   };
 
   const qty = {};
@@ -333,22 +509,19 @@
     calc();
   }
 
-  const modifiers = {
-    stairs:     { label: 'Stairs/Upper floor',       price: 35 },
-    longCarry:  { label: 'Long carry/hard access',   price: 35 },
-    disassembly:{ label: 'Disassembly',              price: 45 },
-    sameDay:    { label: 'Same-day/rush',            price: 60 },
-    heavy:      { label: 'Exceptionally heavy load', price: 60 },
-    demo:       { label: 'Light demo/drywall',       price: 100 },
-    cleaning:   { label: 'Sweep-out/cleaning',       price: 50 },
-    dumpFee:    { label: 'Dump fee',                 price: 65 },
-  };
+  function toggleRow(id) {
+    const checked = document.getElementById(id).checked;
+    const row = document.getElementById('row-' + id);
+    if (checked) row.classList.add('checked');
+    else row.classList.remove('checked');
+  }
 
-  function fmt(n) { return '$' + n.toLocaleString('en-US', {minimumFractionDigits: 0}); }
+  function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 0 }); }
 
   function calc() {
     const lines = [];
     let total = 0;
+    let bundleSavings = 0;
 
     const load = parseInt(document.getElementById('loadSize').value) || 0;
     if (load > 0) {
@@ -372,6 +545,17 @@
       }
     });
 
+    Object.keys(upsells).forEach(k => {
+      if (document.getElementById(k).checked) {
+        const u = upsells[k];
+        const saved = u.regular - u.bundle;
+        const pct = Math.round(saved / u.regular * 100);
+        lines.push({ label: u.label + ' (bundle rate)', amount: u.bundle, savings: saved, pct });
+        total += u.bundle;
+        bundleSavings += saved;
+      }
+    });
+
     const extra = parseFloat(document.getElementById('extra').value) || 0;
     if (extra > 0) { lines.push({ label: 'Additional charge', amount: extra }); total += extra; }
 
@@ -381,44 +565,71 @@
     total = Math.max(0, total);
 
     const container = document.getElementById('summaryLines');
-    container.innerHTML = lines.map(l =>
-      `<div class="summary-line"><span>${l.label}</span><span>${fmt(l.amount)}</span></div>`
-    ).join('') || '<div class="summary-line" style="color:#666;">No items selected yet.</div>';
+    container.innerHTML = lines.map(l => {
+      if (l.savings) {
+        return `<div class="summary-line">
+          <span>${l.label} <span style="font-size:0.8rem;color:#34d399;">(you save ${fmt(l.savings)} — ${l.pct}% off)</span></span>
+          <span style="color:#34d399;">${fmt(l.amount)}</span>
+        </div>`;
+      }
+      return `<div class="summary-line${l.amount < 0 ? ' savings' : ''}">
+        <span>${l.label}</span><span>${l.amount < 0 ? '-' : ''}${fmt(l.amount)}</span>
+      </div>`;
+    }).join('') || '<div class="summary-line" style="color:#666;">No items selected yet.</div>';
 
     document.getElementById('totalDisplay').textContent = fmt(total);
+
+    const banner = document.getElementById('savingsBanner');
+    if (bundleSavings > 0) {
+      banner.style.display = 'block';
+      banner.textContent = `Bundle discount applied — customer saves ${fmt(bundleSavings)} vs. hiring separately!`;
+    } else {
+      banner.style.display = 'none';
+    }
   }
 
   function resetAll() {
     Object.keys(qty).forEach(k => { qty[k] = 0; document.getElementById(k + 'Qty').textContent = 0; });
     document.getElementById('loadSize').value = '0';
     Object.keys(modifiers).forEach(k => document.getElementById(k).checked = false);
+    Object.keys(upsells).forEach(k => {
+      document.getElementById(k).checked = false;
+      document.getElementById('row-' + k).classList.remove('checked');
+    });
     document.getElementById('discount').value = 0;
     document.getElementById('extra').value = 0;
     calc();
   }
 
   function printQuote() {
-    const date = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-    // Gather lines from the summary
     const lines = [...document.querySelectorAll('#summaryLines .summary-line')].map(el => {
       const spans = el.querySelectorAll('span');
-      return { label: spans[0].textContent, amount: spans[1].textContent };
+      const label = spans[0].childNodes[0].textContent.trim();
+      const savingsEl = spans[0].querySelector('span');
+      const savingsNote = savingsEl ? savingsEl.textContent.trim() : '';
+      const amount = spans[1] ? spans[1].textContent.trim() : '';
+      return { label, savingsNote, amount };
     });
-    const total = document.getElementById('totalDisplay').textContent;
 
-    if (lines.length === 0) {
-      alert('Add items to the quote before saving.');
-      return;
-    }
+    const totalText = document.getElementById('totalDisplay').textContent;
 
-    // Canvas setup
-    const W = 600;
-    const lineH = 28;
+    let bundleSavings = 0;
+    Object.keys(upsells).forEach(k => {
+      if (document.getElementById(k).checked) {
+        bundleSavings += upsells[k].regular - upsells[k].bundle;
+      }
+    });
+
+    if (lines.length === 0) { alert('Add items to the quote before saving.'); return; }
+
+    const W = 640;
+    const lineH = 32;
     const padX = 40;
-    const headerH = 120;
-    const footerH = 60;
-    const totalH = 50;
+    const headerH = 130;
+    const footerH = bundleSavings > 0 ? 100 : 70;
+    const totalH = 52;
     const H = headerH + lines.length * lineH + totalH + footerH;
 
     const canvas = document.createElement('canvas');
@@ -432,53 +643,95 @@
 
     // Header bar
     ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(0, 0, W, 80);
+    ctx.fillRect(0, 0, W, 85);
+
+    // Accent stripe
+    ctx.fillStyle = '#f0a500';
+    ctx.fillRect(0, 85, W, 5);
 
     // Company name
     ctx.fillStyle = '#f0a500';
-    ctx.font = 'bold 24px Arial';
+    ctx.font = 'bold 22px Arial';
     ctx.fillText('NORTHWEST JUNK REMOVAL', padX, 38);
 
-    // Date
+    // Subtitle
     ctx.fillStyle = '#aaaaaa';
-    ctx.font = '14px Arial';
+    ctx.font = '13px Arial';
     ctx.fillText('Job Quote — ' + date, padX, 62);
+
+    // Phone
+    ctx.fillStyle = '#888888';
+    ctx.font = '12px Arial';
+    ctx.fillText('(541) 425-2008  |  northwestjunkpros.com', padX, 78);
+
+    // Section header
+    ctx.fillStyle = '#333333';
+    ctx.font = 'bold 13px Arial';
+    ctx.fillText('PRICE BREAKDOWN', padX, 115);
 
     // Divider
     ctx.fillStyle = '#e0e0e0';
-    ctx.fillRect(padX, 90, W - padX * 2, 1);
+    ctx.fillRect(padX, 120, W - padX * 2, 1);
 
     // Line items
     let y = headerH;
     lines.forEach((line, i) => {
+      const isSavings = line.savingsNote.length > 0;
       ctx.fillStyle = i % 2 === 0 ? '#f9f9f9' : '#ffffff';
-      ctx.fillRect(0, y - 20, W, lineH);
-      ctx.fillStyle = '#222222';
-      ctx.font = '14px Arial';
-      ctx.fillText(line.label, padX, y);
+      ctx.fillRect(0, y - 22, W, lineH);
+
+      ctx.fillStyle = isSavings ? '#166534' : '#222222';
+      ctx.font = isSavings ? 'bold 13px Arial' : '13px Arial';
+      ctx.fillText(line.label, padX, y - 4);
+
+      if (isSavings && line.savingsNote) {
+        ctx.fillStyle = '#16a34a';
+        ctx.font = '11px Arial';
+        ctx.fillText(line.savingsNote, padX, y + 10);
+      }
+
+      ctx.fillStyle = isSavings ? '#16a34a' : '#222222';
+      ctx.font = isSavings ? 'bold 14px Arial' : '14px Arial';
       ctx.textAlign = 'right';
-      ctx.fillText(line.amount, W - padX, y);
+      ctx.fillText(line.amount, W - padX, y - 4);
       ctx.textAlign = 'left';
+
       y += lineH;
     });
 
     // Total bar
     ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(0, y - 4, W, totalH);
+    ctx.fillRect(0, y - 6, W, totalH);
     ctx.fillStyle = '#f0a500';
     ctx.font = 'bold 20px Arial';
     ctx.fillText('TOTAL', padX, y + 26);
     ctx.textAlign = 'right';
-    ctx.fillText(total, W - padX, y + 26);
+    ctx.fillText(totalText, W - padX, y + 26);
     ctx.textAlign = 'left';
     y += totalH;
 
-    // Footer
-    ctx.fillStyle = '#888888';
-    ctx.font = '13px Arial';
-    ctx.fillText('Thank you for choosing Northwest Junk Removal!', padX, y + 30);
+    // Bundle savings callout
+    if (bundleSavings > 0) {
+      ctx.fillStyle = '#f0fdf4';
+      ctx.fillRect(padX, y + 8, W - padX * 2, 38);
+      ctx.strokeStyle = '#16a34a';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(padX, y + 8, W - padX * 2, 38);
+      ctx.fillStyle = '#15803d';
+      ctx.font = 'bold 13px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Bundle discount applied — you saved $${bundleSavings} vs. hiring separately!`, W / 2, y + 32);
+      ctx.textAlign = 'left';
+      y += 46;
+    }
 
-    // Download
+    // Footer
+    ctx.fillStyle = '#aaaaaa';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Thank you for choosing Northwest Junk Removal!', W / 2, y + 22);
+    ctx.textAlign = 'left';
+
     const link = document.createElement('a');
     link.download = 'NW-Junk-Quote-' + date.replace(/,?\s+/g, '-') + '.png';
     link.href = canvas.toDataURL('image/png');
