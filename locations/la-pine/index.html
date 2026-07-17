@@ -90,10 +90,10 @@
     <section class="stats" aria-label="By the numbers">
       <div class="container">
         <div class="stats-grid">
-          <div class="stat reveal"><div class="num"><span data-count="2000" data-suffix="+">0</span></div><div class="lbl">Jobs Hauled Away</div></div>
-          <div class="stat reveal d1"><div class="num"><span data-count="70">0</span><span class="unit">%</span></div><div class="lbl">Diverted From Landfill</div></div>
-          <div class="stat reveal d2"><div class="num"><span data-count="13">0</span><span class="unit">+</span></div><div class="lbl">Cities Served</div></div>
-          <div class="stat reveal d3"><div class="num"><span data-count="5">0</span><span class="unit">.0★</span></div><div class="lbl">Average Rating</div></div>
+          <div class="stat reveal"><div class="num"><span data-count="2000" data-suffix="+">2,000+</span></div><div class="lbl">Jobs Hauled Away</div></div>
+          <div class="stat reveal d1"><div class="num"><span data-count="70">70</span><span class="unit">%</span></div><div class="lbl">Diverted From Landfill</div></div>
+          <div class="stat reveal d2"><div class="num"><span data-count="13">13</span><span class="unit">+</span></div><div class="lbl">Cities Served</div></div>
+          <div class="stat reveal d3"><div class="num"><span data-count="5">5</span><span class="unit">.0★</span></div><div class="lbl">Average Rating</div></div>
         </div>
       </div>
     </section>
@@ -227,10 +227,16 @@
             <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 5.5C3 4.7 3.7 4 4.5 4H7l1.5 4.5L6.7 10a12 12 0 0 0 5.3 5.3l1.5-1.8L18 15v2.5c0 .8-.7 1.5-1.5 1.5A14.5 14.5 0 0 1 3 5.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
             <span class="t"><span>Prefer to talk? Call us 7 days a week</span><a href="tel:+15414252008">(541) 425-2008</a></span>
           </div>
+          <a class="fast-text-link" href="sms:+15414252008" aria-label="Text photos for a fast junk removal quote">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Text photos for a fast quote
+          </a>
         </div>
-        <form class="quote-form reveal d1" id="quote-form" novalidate>
+        <form class="quote-form reveal d1" id="quote-form" name="quote-request" method="POST" action="https://creative-arithmetic-ebf0f5.netlify.app/thank-you.html" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="quote-request" />
+          <input type="hidden" name="source-page" value="La Pine location page" />
+          <p class="hp-field" aria-hidden="true"><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
           <h3>Request your free La Pine quote</h3>
-          <p class="sub">We'll reply by phone or email — usually within a couple of hours during business hours.</p>
+          <p class="sub">Send the details here—no email app required. We'll contact you as soon as possible.</p>
           <div class="field row">
             <div class="field"><label for="f-name">Name <span class="req">*</span></label><input id="f-name" name="name" type="text" autocomplete="name" placeholder="Jane Doe" required /></div>
             <div class="field"><label for="f-phone">Phone <span class="req">*</span></label><input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="(541) 555-0123" required /></div>
@@ -249,9 +255,9 @@
               </select>
             </div>
           </div>
-          <div class="field"><label for="f-details">What needs to go?</label><textarea id="f-details" name="details" placeholder="e.g. Old sofa, a fridge, and about 10 boxes from the garage. Ground floor, side gate access."></textarea></div>
+          <div class="field"><label for="f-details">What needs to go? <span class="req">*</span></label><textarea id="f-details" name="details" placeholder="e.g. Old sofa, a fridge, and about 10 boxes from the garage. Ground floor, side gate access." required></textarea></div>
           <button class="btn btn-lg" type="submit">Send My Quote Request <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <p class="form-note">By submitting, you'll open a pre-filled email to our team. We never share your details.</p>
+          <p class="form-note">Your request is sent securely. We never share your details.</p>
           <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
         </form>
       </div>
@@ -321,7 +327,7 @@
   </footer>
   <div class="mobile-callbar">
     <a class="btn btn-ghost" href="tel:+15414252008" style="color:var(--text)"><svg viewBox="0 0 24 24" fill="none"><path d="M3 5.5C3 4.7 3.7 4 4.5 4H7l1.5 4.5L6.7 10a12 12 0 0 0 5.3 5.3l1.5-1.8L18 15v2.5c0 .8-.7 1.5-1.5 1.5A14.5 14.5 0 0 1 3 5.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Call</a>
-    <a class="btn" href="#quote">Free Quote</a>
+    <a class="btn" href="sms:+15414252008" aria-label="Text photos for a fast quote">Text Photos</a>
   </div>
   <script src="../../assets/app.js" defer></script>
 </body>

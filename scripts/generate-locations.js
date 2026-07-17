@@ -221,7 +221,7 @@ function footer(prefix) {
   </footer>
   <div class="mobile-callbar">
     <a class="btn btn-ghost" href="tel:${PHONE_TEL}" style="color:var(--text)">${I.phone} Call</a>
-    <a class="btn" href="#quote">Free Quote</a>
+    <a class="btn" href="sms:${PHONE_TEL}" aria-label="Text photos for a fast quote">Text Photos</a>
   </div>
   <script src="${prefix}assets/app.js" defer></script>
 </body>
@@ -310,10 +310,16 @@ function quoteSection(city) {
             <span class="ic" aria-hidden="true">${I.phone}</span>
             <span class="t"><span>Prefer to talk? Call us 7 days a week</span><a href="tel:${PHONE_TEL}">${PHONE_DISP}</a></span>
           </div>
+          <a class="fast-text-link" href="sms:${PHONE_TEL}" aria-label="Text photos for a fast junk removal quote">
+            ${I.mail} Text photos for a fast quote
+          </a>
         </div>
-        <form class="quote-form reveal d1" id="quote-form" novalidate>
+        <form class="quote-form reveal d1" id="quote-form" name="quote-request" method="POST" action="https://creative-arithmetic-ebf0f5.netlify.app/thank-you.html" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="quote-request" />
+          <input type="hidden" name="source-page" value="${city.name} location page" />
+          <p class="hp-field" aria-hidden="true"><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
           <h3>Request your free ${city.name} quote</h3>
-          <p class="sub">We'll reply by phone or email — usually within a couple of hours during business hours.</p>
+          <p class="sub">Send the details here—no email app required. We'll contact you as soon as possible.</p>
           <div class="field row">
             <div class="field"><label for="f-name">Name <span class="req">*</span></label><input id="f-name" name="name" type="text" autocomplete="name" placeholder="Jane Doe" required /></div>
             <div class="field"><label for="f-phone">Phone <span class="req">*</span></label><input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="(541) 555-0123" required /></div>
@@ -332,9 +338,9 @@ function quoteSection(city) {
               </select>
             </div>
           </div>
-          <div class="field"><label for="f-details">What needs to go?</label><textarea id="f-details" name="details" placeholder="e.g. Old sofa, a fridge, and about 10 boxes from the garage. Ground floor, side gate access."></textarea></div>
+          <div class="field"><label for="f-details">What needs to go? <span class="req">*</span></label><textarea id="f-details" name="details" placeholder="e.g. Old sofa, a fridge, and about 10 boxes from the garage. Ground floor, side gate access." required></textarea></div>
           <button class="btn btn-lg" type="submit">Send My Quote Request ${I.arrow}</button>
-          <p class="form-note">By submitting, you'll open a pre-filled email to our team. We never share your details.</p>
+          <p class="form-note">Your request is sent securely. We never share your details.</p>
           <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
         </form>
       </div>
@@ -449,10 +455,10 @@ function cityPage(city) {
     <section class="stats" aria-label="By the numbers">
       <div class="container">
         <div class="stats-grid">
-          <div class="stat reveal"><div class="num"><span data-count="2000" data-suffix="+">0</span></div><div class="lbl">Jobs Hauled Away</div></div>
-          <div class="stat reveal d1"><div class="num"><span data-count="70">0</span><span class="unit">%</span></div><div class="lbl">Diverted From Landfill</div></div>
-          <div class="stat reveal d2"><div class="num"><span data-count="13">0</span><span class="unit">+</span></div><div class="lbl">Cities Served</div></div>
-          <div class="stat reveal d3"><div class="num"><span data-count="5">0</span><span class="unit">.0★</span></div><div class="lbl">Average Rating</div></div>
+          <div class="stat reveal"><div class="num"><span data-count="2000" data-suffix="+">2,000+</span></div><div class="lbl">Jobs Hauled Away</div></div>
+          <div class="stat reveal d1"><div class="num"><span data-count="70">70</span><span class="unit">%</span></div><div class="lbl">Diverted From Landfill</div></div>
+          <div class="stat reveal d2"><div class="num"><span data-count="13">13</span><span class="unit">+</span></div><div class="lbl">Cities Served</div></div>
+          <div class="stat reveal d3"><div class="num"><span data-count="5">5</span><span class="unit">.0★</span></div><div class="lbl">Average Rating</div></div>
         </div>
       </div>
     </section>
@@ -586,7 +592,12 @@ function locationsIndex() {
 
 /* ---------- Sitemap + robots ---------- */
 function sitemap() {
-  const today = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const today = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("-");
   const urls = [
     { loc: `${BASE}/`, pri: "1.0" },
     { loc: `${BASE}/locations/`, pri: "0.8" },

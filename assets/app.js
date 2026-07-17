@@ -3,7 +3,8 @@
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---- Year ---- */
-  document.getElementById("year").textContent = new Date().getFullYear();
+  var year = document.getElementById("year");
+  if (year) year.textContent = new Date().getFullYear();
 
   /* ---- Header blur on scroll ---- */
   var header = document.getElementById("site-header");
@@ -41,11 +42,12 @@
     var isFloat = target % 1 !== 0;
     if (reduceMotion) { el.textContent = (isFloat ? target.toFixed(1) : target) + suffix; return; }
     var start = performance.now(), dur = 1400;
+    el.textContent = "0";
     function tick(now) {
       var p = Math.min((now - start) / dur, 1);
       var eased = 1 - Math.pow(1 - p, 3);
       var val = target * eased;
-      el.textContent = (isFloat ? val.toFixed(1) : Math.round(val)) + suffix;
+      el.textContent = (isFloat ? val.toFixed(1) : Math.round(val).toLocaleString()) + suffix;
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -83,13 +85,17 @@
     }
   }
 
-  /* ---- Quote form -> Google Sheet + mailto fallback ---- */
+  /* ---- Quote form -> Google Sheet + Netlify Forms ---- */
   var SHEET_URL = "https://script.google.com/macros/s/AKfycby4bWiGxwij7E_H2sD0yJ4VtmUu84SQzfh97-xzU1f56C7oaA-DaJClJLT2NzUUzuHw-w/exec";
+  var NETLIFY_FORM_URL = "https://creative-arithmetic-ebf0f5.netlify.app/";
   var form = document.getElementById("quote-form");
   var status = document.getElementById("form-status");
+  if (!form || !status) return;
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     if (!form.checkValidity()) { form.reportValidity(); return; }
+
     var data = new FormData(form);
     var name = (data.get("name") || "").trim();
     var phone = (data.get("phone") || "").trim();
@@ -98,29 +104,44 @@
     var service = data.get("service") || "";
     var details = (data.get("details") || "").trim();
 
-    var btn = form.querySelector("button[type=submit]");
-    btn.disabled = true;
-    btn.textContent = "Sending…";
+    var button = form.querySelector('button[type="submit"]');
+    data.set("form-name", form.getAttribute("name"));
+    data.set("source-page", window.location.href);
+    status.className = "form-status show is-pending";
+    status.textContent = "Sending your request…";
+    button.disabled = true;
+    button.setAttribute("aria-busy", "true");
 
-    fetch(SHEET_URL, {
+    var sheetRequest = fetch(SHEET_URL, {
       method: "POST",
       mode: "no-cors",
       body: JSON.stringify({ name: name, phone: phone, email: email, city: city, service: service, details: details }),
       headers: { "Content-Type": "text/plain" }
-    })
-    .then(function () {
-      status.classList.add("show");
-      status.textContent = "Got it, " + (name || "there") + "! We'll be in touch by phone or email shortly. Prefer to call? (541) 425-2008.";
+    });
+
+    var netlifyRequest = fetch(NETLIFY_FORM_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(data).toString()
+    });
+
+    Promise.allSettled([sheetRequest, netlifyRequest])
+    .then(function (results) {
+      var delivered = results.some(function (result) { return result.status === "fulfilled"; });
+      if (!delivered) throw new Error("Form submission failed");
+      status.className = "form-status show is-success";
+      status.innerHTML = "Thanks, " + (name || "there") + "! Your quote request was sent. We’ll contact you soon. Need help now? <a href=\"tel:+15414252008\">Call (541) 425-2008</a>.";
       form.reset();
+      if (window.gtag) window.gtag("event", "generate_lead", { method: "quote_form" });
     })
     .catch(function () {
-      status.classList.add("show");
-      status.textContent = "Got it, " + (name || "there") + "! We'll be in touch by phone or email shortly. Prefer to call? (541) 425-2008.";
-      form.reset();
+      status.className = "form-status show is-error";
+      status.innerHTML = "We couldn’t send the form. Please <a href=\"tel:+15414252008\">call</a> or <a href=\"sms:+15414252008\">text (541) 425-2008</a> and we’ll help right away.";
     })
     .finally(function () {
-      btn.disabled = false;
-      btn.innerHTML = 'Send My Quote Request <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      button.disabled = false;
+      button.removeAttribute("aria-busy");
     });
   });
 })();
