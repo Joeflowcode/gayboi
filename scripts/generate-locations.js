@@ -17,75 +17,70 @@ const EMAIL = "info@northwestjunkpros.com";
 
 /* ---------- City data ---------- */
 const REGIONS = {
-  desert: { label: "High Desert", full: "Central Oregon" },
-  valley: { label: "Willamette Valley", full: "McKenzie River Corridor" },
+  core: { label: "Salem–Keizer", full: "Salem Metropolitan Area" },
+  nearby: { label: "Nearby Cities", full: "Marion & Polk Counties" },
 };
 
 const CITIES = [
-  { slug: "bend", name: "Bend", region: "desert", county: "Deschutes County", geo: [44.0582, -121.3153],
-    intro: "From the Old Mill District to NorthWest Crossing, Bend keeps us busy — and we love it. Northwest Junk Pros is your local crew for fast, eco-friendly junk removal across Deschutes County, whether you're clearing a garage on Awbrey Butte or a whole rental near the river. Same-day pickups are often available, and we keep about 70% of what we haul out of the landfill.",
-    tags: ["Old Mill District", "NorthWest Crossing", "Awbrey Butte", "Old Bend", "Larkspur", "Deschutes River Woods"],
-    nearby: ["redmond", "sisters", "sunriver"] },
+  { slug: "salem", name: "Salem", region: "core", county: "Marion & Polk Counties", geo: [44.9429, -123.0351],
+    intro: "Northwest Junk Pros provides hands-off junk removal throughout Salem. We clear furniture, appliances, garage clutter, estate contents, yard debris, rental leftovers, and business items with an upfront quote before loading.",
+    tags: ["Downtown Salem", "South Salem", "West Salem", "North Salem", "Four Corners", "Lancaster"],
+    nearby: ["keizer", "four-corners", "turner"] },
 
-  { slug: "redmond", name: "Redmond", region: "desert", county: "Deschutes County", geo: [44.2726, -121.1739],
-    intro: "Redmond is growing fast, and all that growth leaves things behind — old furniture, renovation debris, garage clutter. Northwest Junk Pros hauls it away on your schedule, from Dry Canyon to the neighborhoods near Roberts Field. Upfront pricing, friendly crews, and responsible recycling, every single time.",
-    tags: ["Dry Canyon", "Eastside", "SW Redmond", "Roberts Field area", "Canal Row"],
-    nearby: ["bend", "sisters", "la-pine"] },
+  { slug: "keizer", name: "Keizer", region: "core", county: "Marion County", geo: [44.9901, -123.0262],
+    intro: "From single-item pickups to full garage and rental cleanouts, Northwest Junk Pros serves Keizer with straightforward pricing and full-service loading. Send photos and your ZIP code for the fastest quote.",
+    tags: ["Keizer", "Clear Lake", "Gubser", "Keizer Rapids", "North River Road"],
+    nearby: ["salem", "hayesville", "woodburn"] },
 
-  { slug: "sisters", name: "Sisters", region: "desert", county: "Deschutes County", geo: [44.2909, -121.5492],
-    intro: "In Sisters, we help homeowners and vacation-rental owners alike clear out the clutter without disturbing that quiet, Western charm. Northwest Junk Pros covers the whole area at the gateway to the Cascade Lakes — from Tollgate to Black Butte Ranch — with careful, eco-minded hauling and honest, upfront quotes.",
-    tags: ["Tollgate", "Black Butte Ranch", "Crossroads", "Downtown Sisters", "Camp Sherman"],
-    nearby: ["bend", "redmond", "sunriver"] },
+  { slug: "four-corners", name: "Four Corners", region: "core", county: "Marion County", geo: [44.9273, -122.9848],
+    intro: "Northwest Junk Pros handles furniture, appliances, household junk, yard debris, and property cleanouts throughout Four Corners and east Salem. We quote before loading so you know the price first.",
+    tags: ["Four Corners", "East Salem", "State Street", "Lancaster", "Cordon Road"],
+    nearby: ["salem", "hayesville", "turner"] },
 
-  { slug: "sunriver", name: "Sunriver", region: "desert", county: "Deschutes County", geo: [43.8735, -121.4385],
-    intro: "Sunriver's resort homes and rentals see a lot of turnover, and we make cleanouts effortless. Northwest Junk Pros removes old furniture, appliances, and accumulated junk from properties across the community south of Bend, with same-day options for busy owners and property managers.",
-    tags: ["Sunriver Resort", "Caldera Springs", "Crosswater", "Three Rivers"],
-    nearby: ["bend", "la-pine", "redmond"] },
+  { slug: "hayesville", name: "Hayesville", region: "core", county: "Marion County", geo: [44.9854, -122.9823],
+    intro: "Northwest Junk Pros offers route-based junk pickup in Hayesville and northeast Salem. Call or text photos for furniture removal, appliance hauling, garage cleanouts, and rental turnover work.",
+    tags: ["Hayesville", "Northeast Salem", "Portland Road", "Lancaster", "Brooks"],
+    nearby: ["keizer", "salem", "woodburn"] },
 
-  { slug: "la-pine", name: "La Pine", region: "desert", county: "Deschutes County", geo: [43.6707, -121.5042],
-    intro: "Out in La Pine, space is plenty but hauling is a hassle — that's where we come in. Northwest Junk Pros serves the high-desert gateway to the Newberry Volcanic Monument, clearing everything from shop cleanouts to yard debris, and recycling or donating whatever we possibly can.",
-    tags: ["Downtown La Pine", "Wickiup Junction", "Newberry Estates", "Finley Butte"],
-    nearby: ["sunriver", "bend", "gilchrist"] },
+  { slug: "turner", name: "Turner", region: "nearby", county: "Marion County", geo: [44.8432, -122.9529],
+    intro: "Northwest Junk Pros schedules junk removal and property cleanouts in Turner by route. We handle household clutter, furniture, appliances, yard debris, and larger cleanout projects.",
+    tags: ["Turner", "Delaney Road", "Turner Lake", "Mill Creek", "South Salem routes"],
+    nearby: ["salem", "aumsville", "stayton"] },
 
-  { slug: "gilchrist", name: "Gilchrist", region: "desert", county: "Klamath County",
-    intro: "The historic mill town of Gilchrist may be small, but no job is too far for us. Northwest Junk Pros brings the same fast, upfront junk removal to Gilchrist and the Highway 97 corridor that our Central Oregon neighbors count on — with eco-friendly disposal at the heart of everything we do.",
-    tags: ["Gilchrist", "Crescent Lake Jct.", "Highway 97 corridor"],
-    nearby: ["crescent", "la-pine", "sunriver"] },
+  { slug: "aumsville", name: "Aumsville", region: "nearby", county: "Marion County", geo: [44.8409, -122.8709],
+    intro: "Need bulky items or a property cleanout handled in Aumsville? Northwest Junk Pros groups nearby jobs by route and provides an upfront quote before the work begins.",
+    tags: ["Aumsville", "Main Street", "Mill Creek", "Rural Marion County"],
+    nearby: ["turner", "stayton", "salem"] },
 
-  { slug: "crescent", name: "Crescent", region: "desert", county: "Klamath County",
-    intro: "Near the shores of Crescent and Odell Lakes, we help cabin owners and residents clear out the old to make room for the new. Northwest Junk Pros handles junk removal across the Crescent area and the Cascade Lakes gateway, with friendly service and eco-friendly disposal you can feel good about.",
-    tags: ["Crescent", "Crescent Lake", "Odell Lake", "Diamond Peak area"],
-    nearby: ["gilchrist", "la-pine", "sunriver"] },
+  { slug: "stayton", name: "Stayton", region: "nearby", county: "Marion County", geo: [44.8007, -122.7945],
+    intro: "Northwest Junk Pros provides scheduled junk removal in Stayton for homes, rentals, estates, yards, and small businesses. Text photos and your ZIP code so we can confirm the route and quote.",
+    tags: ["Stayton", "Downtown Stayton", "Sublimity area", "Santiam corridor"],
+    nearby: ["aumsville", "turner", "silverton"] },
 
-  { slug: "eugene", name: "Eugene", region: "valley", county: "Lane County", geo: [44.0521, -123.0868],
-    intro: "From the Whiteaker to south Eugene and the university area, Eugene is one of our busiest service areas. Northwest Junk Pros clears apartments, estates, offices, and garages across Lane County — donating usable goods to local charities and recycling the rest, so about 70% never sees a landfill.",
-    tags: ["Whiteaker", "South Eugene", "Bethel", "Santa Clara", "Churchill", "River Road"],
-    nearby: ["springfield", "walterville", "vida"] },
+  { slug: "silverton", name: "Silverton", region: "nearby", county: "Marion County", geo: [45.0051, -122.7831],
+    intro: "Northwest Junk Pros schedules furniture pickup, appliance removal, garage cleanouts, and larger property cleanups in Silverton. Route availability depends on the job and location.",
+    tags: ["Silverton", "Downtown Silverton", "Silver Creek", "Rural Marion County"],
+    nearby: ["woodburn", "stayton", "salem"] },
 
-  { slug: "springfield", name: "Springfield", region: "valley", county: "Lane County", geo: [44.0462, -123.0220],
-    intro: "Northwest Junk Pros is proud to serve Springfield, from Thurston to the Gateway district and historic Main Street. Whether it's a single appliance or a full property cleanout, our local crew shows up on time, quotes you upfront, and hauls it all away — often the very same day.",
-    tags: ["Thurston", "Gateway", "Mohawk", "Downtown / Main St.", "Glenwood"],
-    nearby: ["eugene", "walterville", "vida"] },
+  { slug: "woodburn", name: "Woodburn", region: "nearby", county: "Marion County", geo: [45.1437, -122.8554],
+    intro: "Northwest Junk Pros offers route-based junk hauling in Woodburn for household items, rentals, garages, estates, and commercial spaces. Send photos for a fast, upfront quote.",
+    tags: ["Woodburn", "Downtown Woodburn", "I-5 corridor", "Gervais area"],
+    nearby: ["keizer", "hayesville", "silverton"] },
 
-  { slug: "walterville", name: "Walterville", region: "valley", county: "Lane County",
-    intro: "Along the McKenzie River just east of Springfield, Walterville residents trust Northwest Junk Pros for honest, eco-friendly hauling. We clear barns, sheds, yards, and homes throughout the corridor, recycling and donating as much as we possibly can on every job.",
-    tags: ["Walterville", "Cedar Flat", "Deerhorn", "McKenzie corridor"],
-    nearby: ["springfield", "vida", "eugene"] },
+  { slug: "dallas", name: "Dallas", region: "nearby", county: "Polk County", geo: [44.9193, -123.3170],
+    intro: "Northwest Junk Pros schedules junk removal and cleanouts in Dallas and nearby Polk County. We handle furniture, appliances, household clutter, yard debris, and full-property projects.",
+    tags: ["Dallas", "Downtown Dallas", "Rickreall area", "Rural Polk County"],
+    nearby: ["salem", "independence", "monmouth"] },
 
-  { slug: "vida", name: "Vida", region: "valley", county: "Lane County",
-    intro: "Tucked along the McKenzie near the Goodpasture Covered Bridge, Vida is exactly the kind of community we're built to serve. Northwest Junk Pros travels the river corridor for cleanouts big and small, with the same upfront pricing and friendly service our neighbors rely on.",
-    tags: ["Vida", "Goodpasture", "Leaburg", "Nimrod"],
-    nearby: ["walterville", "blue-river", "mckenzie-bridge"] },
+  { slug: "independence", name: "Independence", region: "nearby", county: "Polk County", geo: [44.8512, -123.1868],
+    intro: "Northwest Junk Pros provides scheduled junk pickup and property cleanouts in Independence. We quote before loading and handle the lifting, hauling, and sweep-up.",
+    tags: ["Independence", "Downtown", "Riverfront", "Monmouth–Independence"],
+    nearby: ["monmouth", "dallas", "salem"] },
 
-  { slug: "blue-river", name: "Blue River", region: "valley", county: "Lane County",
-    intro: "Blue River has shown incredible resilience rebuilding along the McKenzie, and we're honored to help. Northwest Junk Pros assists with debris removal, cleanouts, and hauling throughout the area — responsibly recycling and donating wherever possible as the community moves forward.",
-    tags: ["Blue River", "Rainbow", "Finn Rock", "Holiday Farm area"],
-    nearby: ["vida", "mckenzie-bridge", "walterville"] },
-
-  { slug: "mckenzie-bridge", name: "McKenzie Bridge", region: "valley", county: "Lane County",
-    intro: "At the foot of the Cascades along Highway 126, McKenzie Bridge is the last stop on our McKenzie River route — and we're glad to make the drive. Northwest Junk Pros provides cabin cleanouts, appliance removal, and debris hauling for the upper McKenzie community, with eco-friendly disposal every time.",
-    tags: ["McKenzie Bridge", "Belknap Springs", "Rainbow", "Upper McKenzie"],
-    nearby: ["blue-river", "vida", "walterville"] },
+  { slug: "monmouth", name: "Monmouth", region: "nearby", county: "Polk County", geo: [44.8485, -123.2339],
+    intro: "Northwest Junk Pros serves Monmouth with route-based furniture removal, appliance hauling, rental turnovers, garage cleanouts, and whole-property cleanup.",
+    tags: ["Monmouth", "Western Oregon University area", "Downtown", "Monmouth–Independence"],
+    nearby: ["independence", "dallas", "salem"] },
 ];
 
 const BY_SLUG = Object.fromEntries(CITIES.map((c) => [c.slug, c]));
@@ -183,7 +178,7 @@ function footer(prefix) {
       <div class="foot-grid">
         <div class="foot-brand">
           <a class="brand" href="${prefix}index.html" aria-label="Northwest Junk Pros home">${LOGO_MARK} Northwest <b>Junk Pros</b></a>
-          <p>Locally owned, eco-conscious junk removal serving Central Oregon and the Willamette Valley. Fast, friendly, and upfront — every time.</p>
+          <p>Locally owned, eco-conscious junk removal serving Salem, Keizer, and nearby Marion and Polk County communities. Fast, friendly, and upfront — every time.</p>
         </div>
         <div class="foot-col">
           <h4>Services</h4>
@@ -457,7 +452,7 @@ function cityPage(city) {
         <div class="stats-grid">
           <div class="stat reveal"><div class="num"><span data-count="2000" data-suffix="+">2,000+</span></div><div class="lbl">Jobs Hauled Away</div></div>
           <div class="stat reveal d1"><div class="num"><span data-count="70">70</span><span class="unit">%</span></div><div class="lbl">Diverted From Landfill</div></div>
-          <div class="stat reveal d2"><div class="num"><span data-count="13">13</span><span class="unit">+</span></div><div class="lbl">Cities Served</div></div>
+          <div class="stat reveal d2"><div class="num"><span data-count="${CITIES.length}">${CITIES.length}</span><span class="unit">+</span></div><div class="lbl">Areas Served</div></div>
           <div class="stat reveal d3"><div class="num"><span data-count="5">5</span><span class="unit">.0★</span></div><div class="lbl">Average Rating</div></div>
         </div>
       </div>
@@ -522,8 +517,8 @@ function cityPage(city) {
 function locationsIndex() {
   const prefix = "../";
   const canonical = `${BASE}/locations/`;
-  const title = `Service Areas | Junk Removal Across Central Oregon & the Willamette Valley`;
-  const desc = `Northwest Junk Pros provides same-day, eco-friendly junk removal across 13 Oregon cities — from Bend and Redmond to Eugene, Springfield, and the McKenzie River corridor. Find your town.`;
+  const title = `Service Areas | Junk Removal in Salem, Keizer & Nearby Cities`;
+  const desc = `Northwest Junk Pros provides junk removal in Salem, Keizer, and nearby Marion and Polk County communities. Find your area and request an upfront quote.`;
 
   const jsonld = {
     "@context": "https://schema.org",
@@ -571,7 +566,7 @@ function locationsIndex() {
       <div class="container hero-inner">
         <span class="eyebrow reveal">Service Areas</span>
         <h1 class="reveal d1" style="font-size:clamp(2.4rem,6vw,4.2rem)">Where we haul</h1>
-        <p class="lead reveal d2">Northwest Junk Pros covers 13 cities across Central Oregon and the Willamette Valley. Find your town below for local pricing, same-day availability, and a crew that knows the area.</p>
+        <p class="lead reveal d2">Northwest Junk Pros focuses on Salem and Keizer, with scheduled routes to nearby Marion and Polk County communities. Find your area below and send photos for an upfront quote.</p>
         <div class="hero-actions reveal d3">
           <a class="btn btn-lg" href="${prefix}index.html#quote">Get a Free Quote ${I.arrow}</a>
           <a class="btn btn-ghost btn-lg" href="tel:${PHONE_TEL}">${I.phone} ${PHONE_DISP}</a>
@@ -580,8 +575,8 @@ function locationsIndex() {
     </section>
     <section class="section" style="padding-top:1rem">
       <div class="container">
-        ${regionBlock("desert")}
-        ${regionBlock("valley")}
+        ${regionBlock("core")}
+        ${regionBlock("nearby")}
         <p class="area-note reveal">Don't see your town? <a href="${prefix}index.html#quote">Ask us anyway</a> — we travel for the right job.</p>
       </div>
     </section>
