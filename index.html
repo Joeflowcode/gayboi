@@ -325,6 +325,30 @@
     display: flex; flex-wrap: wrap; gap: 6px;
   }
 
+  .handyman { background: var(--off-white); }
+
+  .handyman-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .handyman-copy { max-width: 580px; }
+  .handyman-copy .section-sub { margin-bottom: 1.5rem; }
+  .handyman-list { list-style: none; display: grid; gap: 0.8rem; }
+  .handyman-list li { display: flex; gap: 0.7rem; color: var(--mid); line-height: 1.45; }
+  .handyman-list li::before { content: "✓"; color: var(--amber); font-weight: 900; }
+  .handyman-note { margin-top: 1.5rem; font-size: 0.84rem; color: var(--muted); line-height: 1.5; }
+
+  .price-panel { background: var(--green-dark); color: #fff; padding: 2rem; border-radius: 6px; box-shadow: 0 14px 34px rgba(18, 54, 28, 0.18); }
+  .price-panel h3 { font-family: var(--font-head); font-size: 1.65rem; text-transform: uppercase; margin-bottom: 0.45rem; }
+  .price-panel > p { color: rgba(255,255,255,0.78); line-height: 1.55; margin-bottom: 1.25rem; }
+  .price-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.9rem 0; border-top: 1px solid rgba(255,255,255,0.16); }
+  .price-row span { font-size: 0.93rem; }
+  .price-row strong { color: var(--amber-light); font-family: var(--font-head); font-size: 1.15rem; white-space: nowrap; }
+  .price-panel .btn { width: 100%; justify-content: center; margin-top: 1.25rem; }
+
   .tag {
     background: var(--cream);
     color: var(--green);
@@ -764,6 +788,9 @@
     .services-grid { grid-template-columns: 1fr; gap: 1.25rem; }
     .service-img { height: 180px; }
 
+    .handyman-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .price-panel { padding: 1.5rem; }
+
     .steps { grid-template-columns: 1fr; gap: 1rem; }
     .step { padding: 1.5rem 1.25rem; }
     .step::before { font-size: 4rem; top: -0.25rem; right: 0.75rem; }
@@ -808,6 +835,7 @@
   <a href="#" class="nav-logo">Northwest <span>Junk Pros</span></a>
   <ul class="nav-links" id="navLinks">
     <li><a href="#services">Services</a></li>
+    <li><a href="#handyman">Handyman</a></li>
     <li><a href="#service-area">Service Area</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><a href="#faq">FAQ</a></li>
@@ -942,6 +970,34 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<section class="handyman" id="handyman">
+  <div class="container handyman-grid">
+    <div class="handyman-copy">
+      <p class="section-label">More Than Hauling</p>
+      <h2 class="section-title">Handyman Help,<br>Done Right</h2>
+      <p class="section-sub">Need a few things fixed before we haul, move, list, or turn over a rental? Our local crew can take care of practical small jobs while we’re there.</p>
+      <ul class="handyman-list">
+        <li>Furniture assembly, shelving, curtain rods, mirrors, and picture hanging</li>
+        <li>Drywall patches, caulking, door adjustments, hardware swaps, and touch-ups</li>
+        <li>Rental turnover and realtor punch-list help for small, non-permitted repairs</li>
+        <li>Bundle handyman work with junk removal and save an extra trip</li>
+      </ul>
+      <p class="handyman-note">We’ll confirm the final price before work begins. Materials are additional. We do not perform work requiring trade licenses or permits.</p>
+    </div>
+
+    <aside class="price-panel" aria-label="Handyman starting prices">
+      <h3>Simple Starting Prices</h3>
+      <p>Fair, local pricing for the small jobs that are hard to get scheduled.</p>
+      <div class="price-row"><span>Small repair visit</span><strong>from $99</strong></div>
+      <div class="price-row"><span>TV, shelf, or mirror mounting</span><strong>from $79</strong></div>
+      <div class="price-row"><span>Furniture assembly</span><strong>from $85</strong></div>
+      <div class="price-row"><span>Drywall patch & touch-up</span><strong>from $99</strong></div>
+      <div class="price-row"><span>Rental / punch-list visit</span><strong>from $149</strong></div>
+      <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
+    </aside>
   </div>
 </section>
 
@@ -1205,6 +1261,10 @@
             <option>Yard & Debris Removal</option>
             <option>Commercial Cleanout</option>
             <option>Donation Pickup</option>
+            <option>Handyman / Small Repair</option>
+            <option>Furniture Assembly</option>
+            <option>TV, Shelf, or Mirror Mounting</option>
+            <option>Rental / Realtor Punch List</option>
             <option>Other</option>
           </select>
         </div>
@@ -1240,6 +1300,7 @@
         <li><a href="#services">Yard & Debris Removal</a></li>
         <li><a href="#services">Commercial Cleanouts</a></li>
         <li><a href="#services">Donation Pickup</a></li>
+        <li><a href="#handyman">Handyman Services</a></li>
       </ul>
     </div>
     <div class="footer-col">
